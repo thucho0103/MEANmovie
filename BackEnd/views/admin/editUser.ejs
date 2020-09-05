@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+	<link rel="stylesheet" href="/assets/css/styles.css">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Admin dashboad</h2>
+        <ul>
+            <li><a href="/admin"><i class="fas fa-home"></i>Quản lý phim</a></li>
+            <li><a href="/admin/createMovie"><i class="fas fa-plus"></i>Thêm phim</a></li>
+            <li><a href="#"><i class="fas fa-project-diagram"></i>Sửa banner</a></li>
+            <li class="active"><a href="/admin/manageUser"><i class="fas fa-users" ></i>Quản lý users</a></li>
+            <li><a href="/admin/createuser"><i class="fas fa-users" ></i>Thêm user</a></li>
+            <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+        </ul> 
+    </div>
+    <div class="main_content">
+        <div class="info">
+          <h1 style="text-align: center;">Thêm người dùng </h1>
+          <form action="/admin/edituser" method="post">
+            <% if (errors!='0') { %>
+                <p><%=errors[0]%></p>
+             <% } %>
+            <p>Nhập họ & tên người dùng</p>
+            <input type="text" name="userName" minlength="1" value="<%=values.userName%>" required>
+            <p>Nhập địa chỉ email (email chưa đăng kí)</p>
+            <input type="email" name="email" value="<%=values.email%>" required>
+            <p>Nhập số điện thoại (10 số)</p>
+            <input type="number" name="phoneNumber"  length="10"value="<%=values.phoneNumber%>" required>
+            <p>Nhập mật khẩu (trên 6 kí tự)</p>
+            <input type="password" name="password"  minlength="6" value="<%=values.password%>" required>
+            <br>
+            <button type="submit">Cập nhật</button>
+        </div>    
+    </div>
+</div>
+
+</body>
+</html>

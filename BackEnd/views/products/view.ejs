@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        <%=title.toUpperCase()%>
+    </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/phim.css">
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0&appId=425341811562717&autoLogAppEvents=1"></script>
+</head>
+
+<body>
+    <!-- bắt đầu header -->
+    <%- include('header'); -%>
+        <!-- kết thúc header -->
+        <!-- bắt đầu main -->
+        <div class="container-fluid" style="padding: 0%;">
+            <!-- <div class="container mt-5 mb-5">
+                <button class="btn btn-primary" id="mydialog"> Dialog button</button>
+            </div>
+            <script>
+                $('#mydialog').on('click',function(e){
+                    e.preventDefault();
+
+                })
+            </script> -->
+            <div class="main one">
+                <div class="row">
+                    <div class="col-lg-8" style="display: block; margin-left: auto;margin-right: auto;">
+                        <div class="infor-film">
+                            <div class="image-fiml">
+                                <img src="<%=dsphim[0].img%>" style="width: 100%;">
+                                <div class="press">
+                                    <script src="/dist/tata.js"></script>
+                                    <button id="postFavourite" onclick="tata.success('Đã thêm','<%=dsphim[0].ten.toUpperCase()%>')" class="btn btn-success">Yêu thích</button>    
+                                    <script>
+                                        $('#postFavourite').on('click',function(){
+                                            $.ajax({
+                                                type : 'POST',
+                                                url : '/users/favourite',
+                                                data : {
+                                                    id : '<%=dsphim[0]._id%>',
+                                                    img: '<%=dsphim[0].img%>',
+                                                },
+                                            });
+                                        })
+                                    </script>
+                                    <a href="/xemphim/<%=dsphim[0].ten%>"><button class="btn btn-danger">Xem phim</button></a>
+                                </div>
+                            </div>
+                            <div class="meta-row" >
+                                <div class="name-film">
+                                    <p>
+                                        <%=dsphim[0].ten.toUpperCase()%>
+                                    </p>
+                                </div>
+                                <div class="film-infor" style="margin-left: 10px;" >
+                                    <dl class="film-infor-dl" style="width: 350px;">
+                                        <% for(var i =0; i < infor.length; i++) { %>
+                                            <div class="status" style="width: 350px;">
+                                                <dd class="film-infor-dd status" style="font-size: 13px;">
+                                                    <%=infor[i]%>
+                                                </dd>
+                                            </div>
+                                            <% } %>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <h5 style="color: pink;margin-top: 15px; margin-left: 23px;">DIỄN VIÊN</h5>
+                    <div class="actor-actress">
+                        <div class="image-actor">
+                            <img src="http://image.phimmoi.net/profile/default/male/thumb.jpg" alt="ảnh diễn viên">
+                        </div>
+                        <div class="name-actor">
+                            tên diễn viên
+                        </div>
+                    </div> -->
+                        <div class="content-film">
+                            <h5 style="color: pink; padding-top: 15px;margin-left: 23px;">NỘI DUNG PHIM</h5>
+                            <p style="color: white; font-size: 17px; padding: 5px;"><%=dsphim[0].mota%></p>
+                        </div>
+                        <div class="comments">
+                            <h5 style="color: pink;padding-top: 15px;margin-left: 23px;">COMMENTS</h5>
+                            <div class="fb-comments" data-href="http://localhost/DAT/CNPM/phim.html" data-width="840" data-numposts="10"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- kết thúc main -->
+        <!-- bắt đầu footer -->
+        <%- include('footer'); -%>
+            <!-- két thúc footer -->
+</body>
+    <script>
+
+    </script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <!-- <link rel="stylesheet" href="/css/css.css">  -->
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  <script src="https://kit.fontawesome.com/fa66a0c870.js" crossorigin="anonymous"></script>
+  <script src="alertify.min.js"></script>
+  <!-- include the style -->
+  <link rel="stylesheet" href="css/alertify.min.css" />
+  <!-- include a theme -->
+  <link rel="stylesheet" href="css/themes/default.min.css" />
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="sidebar">
+    <h2>Admin dashboad</h2>
+    <ul>
+        <li><a href="/admin"><i class="fas fa-home"></i>Quản lý phim</a></li>
+        <li class="active"><a href="#"><i class="fas fa-plus"></i>Thêm phim</a></li>
+        <li><a href="#"><i class="fas fa-project-diagram"></i>Sửa banner</a></li>
+        <li><a href="/admin/manageUser"><i class="fas fa-users" ></i>Quản lý users</a></li>
+        <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+    </ul> 
+</div>
+    <div class="main_content">
+        <div class="info">
+          <h1 style="text-align: center;">Thêm phim vào danh sách</h1>
+          <form action="/admin/createMovie" method="post">
+            <p>Tên phim 
+              <% if(errors!='0') { %>
+              <div><%=errors[0]%></div> 
+              <% } %>
+            </p>
+            <input type="text" name="ten" placeholder="Nhập tên của phim cần thêm vào" minlength="1" required>
+            <p>Thể loại</p>
+            <p>Điền thông tin phim (vd: phim hành động, phim bộ,..)</p>
+            <!-- <input type="text" name="theloai" placeholder="nhập thể loại của phim, không dấu và cách nhau bằng dấu | vd :phimhanhdong|phimle" required> -->
+            <div class="wrapper">
+              <ol>
+                <li>
+                  <p>phim Lẻ</p>
+                  <input type="checkbox" name="phimle" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim Bộ</p>
+                  <input type="checkbox" name="phimbo" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim viễn tưởng</p>
+                  <input type="checkbox" name="phimvientuong" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim thần thoại</p>
+                  <input type="checkbox" name="phimthanthoai" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim hành động</p>
+                  <input type="checkbox" name="phimhanhdong" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim trinh thám</p>
+                  <input type="checkbox" name="phimtrinhtham" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim hoạt hình</p>
+                  <input type="checkbox" name="phimhoathinh" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim kinh dị</p>
+                  <input type="checkbox" name="phimkinhdi" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim cổ trang</p>
+                  <input type="checkbox" name="phimcotrang" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim hài hước</p>
+                  <input type="checkbox" name="phimhaihuoc" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+                <li>
+                  <p>phim gia đình</p>
+                  <input type="checkbox" name="phimgiadinh" style="height: 20px; width: 20px; margin-bottom: 0%;">
+                </li>
+              </ol>
+            </div>
+            <p>link ảnh bìa</p>
+            <input type="url" name="img" placeholder="Nhập đường dẫn của ảnh." pattern="^(?:(?:https?|HTTPS?|ftp|FTP):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-zA-Z\u00a1-\uffff0-9]-*)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]-*)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))\.?)(?::\d{2,})?(?:[/?#]\S*)?$" required>
+            <p>Thông tin</p>
+            <p>Điền thông tin phim (cácnh nhau dấu |. vd: Trạng thái:Hoàn tất |Điểm IMDb:8.6|)</p>
+            <input type="text" name="thongtin">
+            <p>Đường dẫn</p>
+            <input type="text" name="url" placeholder="Nhập đường dẫn của phim" pattern="^(?:(?:https?|HTTPS?|ftp|FTP):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-zA-Z\u00a1-\uffff0-9]-*)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]-*)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))\.?)(?::\d{2,})?(?:[/?#]\S*)?$" required>
+            <p>mô tả</p>
+            <input type="text" name="mota">
+            <br>
+            <button type="submit" onclick="alertify.success('Xóa thành công')">Thêm mới</button>
+        </div>    
+    </div>
+</div>
+
+</body>
+</html>

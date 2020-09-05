@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/alertify.min.js"></script>
+  <!-- include the style -->
+  <link rel="stylesheet" href="/css/alertify.min.css" />
+  <!-- include a theme -->
+  <link rel="stylesheet" href="/css/themes/default.min.css" />
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Admin dashboad</h2>
+        <ul>
+            <li class="active"><a href="/admin"><i class="fas fa-home"></i>Quản lý phim</a></li>
+            <li><a href="/admin/createMovie"><i class="fas fa-plus"></i>Thêm phim</a></li>
+            <li><a href="#"><i class="fas fa-project-diagram"></i>Sửa banner</a></li>
+            <li><a href="/admin/manageUser"><i class="fas fa-users" ></i>Quản lý users</a></li>
+            <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+        </ul> 
+    </div>
+    <div class="main_content">
+        <div class="info">
+          <h1 style="text-align: center;">Danh sách phim</h1>
+          <table class="rwd-table" >
+              <th>Tên phim</th>
+              <th>Thể loại</th>
+              <th style="text-align: right;">Quản lý</th>
+            <% for(var i =0; i < dsphim.length; i++) { %>
+              <tr>
+                <td ><%=dsphim[i].ten%></td>
+                <td data-th="Genre"><%=dsphim[i].phanloai%></td>
+                <td style="text-align:right; padding-right: 3%;"data-th="Gross">
+                  <a style="font-size: 20px; color: black;" href="/admin/editMovie/<%=dsphim[i]._id%>"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="alertify.confirm('Xóa phim','Xác nhận xóa phim <%=dsphim[i].ten%>', 
+                    function(){ alertify.success('Xóa thành công');
+                    $.ajax({
+                      type: 'DELETE',
+                      url:  '/admin/deleteMovie',
+                      data: {id : '<%=dsphim[i]._id%>'}
+                      }); 
+                      location.reload();
+                    }
+                    ,function(){ alertify.error('Không thành công')});" style="font-size: 20px; color: tomato;"><i class="far fa-trash-alt"></i></a>
+                  <!-- <a style="font-size: 20px;color: tomato;" href="/admin/deleteMovie/<%=dsphim[i].ten%>"><i class="far fa-trash-alt" ></i></a></i> -->
+                </td>
+              </tr>
+            <% } %>  
+          </table>
+          <% if (pages > 0) { %>
+            <div class="pagination">
+                <% if (current == 1) { %>
+                    <a>First</a>
+                <% } else { %>
+                    <a href="?page=1">First</a>
+                <% } %>
+                <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                <% if (i !== 1) { %>
+                    <a>...</a></li>
+                <% } %>
+                <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                    <% if (i == current) { %>
+                      <a class="active"><%= i %></a>
+                    <% } else { %>
+                      <a href="?page=<%= i %>"><%= i %></a>
+                    <% } %>
+                    <% if (i == Number(current) + 4 && i < pages) { %>
+                      <a>...</a>
+                    <% } %>
+                <% } %>
+                <% if (current == pages) { %>
+                    <a>Last</a>
+                <% } else { %>
+                    <a href="?page=<%= pages %>">Last</a></li>
+                <% } %>
+                </div>
+          <% } %>   
+        </div> 
+    </div>
+</div>
+
+</body>
+<script>
+    $('.ajs-button .ajs-ok').on('click',function(){
+      $.ajax({
+        type: 'DELETE',
+        url:  '/admin/deleteMovie',
+        data: {
+        id : 'abcd',
+            }
+        });
+      console.log('abcd');
+    });
+</script>
+</html>

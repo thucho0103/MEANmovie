@@ -1,0 +1,96 @@
+<!-- bắt đầu header -->
+<div class="container-fluid" style="padding: 0%;">
+    <div class="header">
+        <div class="menu">
+            <div class="logo">
+                <a href="/"><img class="logofilm" src="https://movies.fimplus.vn/images/logo.png" alt="logo"></a>
+            </div>
+            <div class="menuphim">
+                <ul class="list">   
+                    <li><a href="/" class="active">FILM</a></li>
+                    <li> <a href="#" class="dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >THỂ LOẠI</a>
+                        <ul class="dropdown-menu" style="padding: 0%; margin: 0%;width: auto;">
+                            <!-- <div class="menu-detail-list a">
+                                <li><a href="/theloai/phimtinhcam">Phim tình cảm</a></li>
+                                <li><a href="/theloai/phimhanhdong">Phim hành động</a></li>
+                                <li><a href="/theloai/phimtrinhtham">Phim trinh thám</a></li>
+                                <li><a href="/theloai/phimhoathinh">Phim hoạt hình</a></li>
+                            </div>
+                            <div class="menu-detail-list b">
+                                <li><a href="/theloai/phimhaihuoc">Phim hài hước</a></li>
+                                <li><a href="/theloai/phimcotrang">Phim cổ trang</a></li>
+                                <li><a href="/theloai/phimtailieu">Phim tài liệu</a></li>
+                                <li><a href="/theloai/phimkhoahocvientuong">Phim khoa học viễn tưởng</a></li>
+                            </div>
+                            <div class="menu-detail-list c">
+                                <li><a href="/theloai/phimtinhcam">Phim tình cảm</a></li>
+                                <li><a href="/theloai/phimhanhdong">Phim hành động</a></li>
+                                <li><a href="/theloai/phimtrinhtham">Phim trinh thám</a></li>
+                                <li><a href="/theloai/phimhoathinh">Phim hoạt hình</a></li>
+                            </div> -->
+                            <table class="table table-borderless table-dark" style="padding: 0%;margin: 0%;font-weight: normal;">
+                                <thead>
+                                  <tr>
+                                    <th style="font-weight: normal;"><a href="/theloai/phimgiadinh">Phim gia đình</a></th>
+                                    <th style="font-weight: normal;"><a href="/theloai/phimhanhdong">Phim hành động</a></th>
+                                    <th style="font-weight: normal;"><a href="/theloai/phimtrinhtham">Phim trinh thám</a></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th style="font-weight: normal;"><a href="/theloai/phimhoathinh">Phim hoạt hình</a></th>
+                                    <td style="font-weight: normal;"><a href="/theloai/phimthanthoai">Phim thần thoại</a></td>
+                                    <td style="font-weight: normal;"><a href="/theloai/phimvientuong">Phim khoa học viễn tưởng</a></td>
+                                  </tr>
+                                  <tr>
+                                    <th style="font-weight: normal;"><a href="/theloai/phimhaihuoc">Phim hài hước</a></th>
+                                    <td style="font-weight: normal;"><a href="/theloai/phimcotrang">Phim cổ trang</a></td>
+                                    <td style="font-weight: normal;"><a href="/theloai/phimkinhdi">Phim kinh dị</a></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </ul>
+                    </li>
+                    <li><a href="/phimle">PHIM LẺ</a></li>
+                    <li><a href="/phimbo">PHIM BỘ</a></li>
+                </ul>
+            </div>
+            
+            <form class="form-inline md-form form-sm" action="/search">
+                <div class="search">
+
+                    <input class="form-control form-control-sm mr-3 w-75" name="search" type="text" placeholder="Search" aria-label="Search">
+                    <button style="border: none; background-color: #00000000;" type="submit">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+            </form>
+            </div>
+            </form>
+            <!-- Modal -->
+            <script>
+                $('#elegantModalForm').on('hidden.bs.modal', function() {
+                    // Load up a new modal...
+                    $('#resetpass').modal('show')
+                })
+            </script>
+            <!-- Modal -->
+            <div class="login-register">
+                <% if (user!=0) {  %>
+                        <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <%=user%>
+                        </a>
+                        <div class="dropdown-menu" style="width: auto;">
+                          <a class="dropdown-item" href="/users/information" style="color: black;text-align: center;padding: 5%;">Thay đổi thông tin</a>
+                          <a class="dropdown-item text-black" href="/users/favourite" style="color: black;text-align: center;padding: 5%;">Danh phim yêu thích</a>
+                        </div>
+                    <a href="/auth/logout">ĐĂNG XUẤT</a>
+                    <% } else { %>
+                        <a href="/auth/login">ĐĂNG NHẬP</a>
+                        <a href="/auth/register">ĐĂNG KÝ</a>
+                        <% } %>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- kết thúc header -->

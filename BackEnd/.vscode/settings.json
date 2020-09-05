@@ -1,0 +1,8 @@
+{
+    "appService.deploySubpath": "",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "git.ignoreLimitWarning": true
+}

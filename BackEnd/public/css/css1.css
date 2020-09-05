@@ -1,0 +1,238 @@
+body{
+    background-color:#cccccc;
+    margin: 0 auto;
+    font-family: 'Speak Pro';
+} 
+
+
+.banner{
+   width:100%;
+   height:50px;
+   background-color:red;
+   margin: 0 0 0 0;
+  
+
+ }
+ #left{
+     float: left;
+     margin-left:50px;
+   
+     
+ }
+ #h2{
+     color:#ffffff;
+     text-align:center;
+     margin-block-start: 10px;
+     margin-block-end: 0px;
+
+ }
+ .right{
+     float:right;
+ }
+ .text0{
+     width:100%;
+     height:30px; 
+ }
+ #h4{
+  margin-block-start: 5px;
+  margin-block-end: 0px;
+  text-align:center;
+  float:left;
+  margin-left:50px;
+ }
+ .menu{
+     width:18%;
+     height:600px;
+     float:left;
+     margin-right:2px;
+     background-color: #ffffff;
+ }
+ .main0{
+     width:78%;
+     height:600px;
+     background-color: #ffffff;
+     margin-left: 2px;
+     float:right;
+     margin-right:2%;
+ }
+ .footer{
+     margin-top:400px;
+     margin-left:10px;
+     font-size:12px;
+ }
+
+ input{
+     outline: none;
+     border-top:none;
+     border-left:none;
+     border-right:none;
+     border-bottom:#494649 solid 1px;
+     width: 95%;
+     margin-left:20px;
+     height:40px;
+     
+ }
+ p{
+     text-align:right;
+     margin-right:20px;
+     font-size:15px;
+     color:#a8a6a6;
+     margin-bottom:15px;
+     margin-top:0px;
+ }
+ .texta{
+     width:95%;
+     height: 40px;
+     outline: none;
+     border-top:none;
+     border-left:none;
+     border-right:none;
+     border-bottom:#494649 solid 1px;
+     margin-left:20px;
+ }
+ .button {
+   
+    padding: 10px 25px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: purple;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px #992c99;
+    margin-left: 50px;
+    margin-bottom:20px;
+    float: left ;
+    margin-top:20px;
+}
+
+.button:hover {background-color: #58257b}
+
+.button:active {
+background-color: #58257b;
+box-shadow: 0 5px #666;
+transform: translateY(4px);
+}
+li{
+ list-style-type: none;
+ margin-top:5px;
+}    
+a{
+text-decoration: none;
+color:black;
+}
+i{
+width:20px;
+height:20px;
+}
+.fa{
+display: inline-block;
+}
+a:hover{
+color: red;
+text-decoration: none;
+}
+a:active{
+color:red;
+}
+
+.search {
+
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: red;
+    border: none;
+    border-radius: 15px;
+    
+    margin-left: 50px;
+    margin-bottom:25px;
+    float: left ;
+    margin-top:10px;
+    margin-right:5px;
+   
+}
+
+.search:hover {background-color:red}
+
+.search:active {
+background-color: red;
+
+transform: translateY(4px);
+}
+.note{
+cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: red;
+    border: none;
+    border-radius: 15px;
+    
+    margin-left: 5px;
+    margin-bottom:25px;
+    float: left ;
+    margin-top:10px;
+    margin-right:5px;
+}
+.note:hover {background-color:red}
+
+.note:active {
+background-color: red;
+
+transform: translateY(4px);
+}
+.flag{
+cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: red;
+    border: none;
+    border-radius: 15px;
+    
+    margin-left: 5px;
+    margin-bottom:25px;
+    float: left ;
+    margin-top:10px;
+    margin-right:20px;  
+}
+.flag:hover {background-color:red}
+
+.flag:active {
+background-color: red;
+
+transform: translateY(4px);
+}
+.t{
+cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: red;
+    border: none;
+    border-radius: 15px;
+    
+    margin-left: 5px;
+    margin-bottom:25px;
+    float: left ;
+    margin-top:10px;
+    margin-right:20px;  
+}
+.t:hover {background-color:red}
+
+.t:active {
+background-color: red;
+
+transform: translateY(4px);
+}
+#h1{
+margin-left:20px;
+}

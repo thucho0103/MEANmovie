@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Xem film</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/phim.css">
+    <!-- <link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" /> -->
+    </style>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0&appId=425341811562717&autoLogAppEvents=1"></script>
+</head>
+
+<body>
+    <!-- bắt đầu header -->
+    <%- include('header'); -%>
+        <!-- kết thúc header -->
+        <!-- bắt dầu main -->
+        <div class="container-fluid" style="padding: 0%;">
+            <div class="main one">
+                <div class="col-lg-10" style="display: block; margin-left: auto;margin-right: auto; width: 75%;">
+                    <video autoplay="autoplay" class="js-player">
+                    <source src="<%=dsphim[0].url%>"/>
+                </video>
+                    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            // Controls (as seen below) works in such a way that as soon as you explicitly define (add) one control
+                            // to the settings, ALL default controls are removed and you have to add them back in by defining those below.
+
+                            // For example, let's say you just simply wanted to add 'restart' to the control bar in addition to the default.
+                            // Once you specify *just* the 'restart' property below, ALL of the controls (progress bar, play, speed, etc) will be removed,
+                            // meaning that you MUST specify 'play', 'progress', 'speed' and the other default controls to see them again.
+                            const controls = [
+                                'play-large', // The large play button in the center
+                                'restart', // Restart playback
+                                'rewind', // Rewind by the seek time (default 10 seconds)
+                                'play', // Play/pause playback
+                                'fast-forward', // Fast forward by the seek time (default 10 seconds)
+                                'progress', // The progress bar and scrubber for playback and buffering
+                                'current-time', // The current time of playback
+                                'duration', // The full duration of the media
+                                'mute', // Toggle mute
+                                'volume', // Volume control
+                                'captions', // Toggle captions
+                                'settings', // Settings menu
+                                'pip', // Picture-in-picture (currently Safari only)
+                                'airplay', // Airplay (currently Safari only)
+                                'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+                                'fullscreen' // Toggle fullscreen
+                            ];
+                            const player = Plyr.setup('.js-player', {
+                                controls
+                            });
+                        });
+                    </script>
+                    <!-- <video id="my-video" class="video-js" controls preload="auto" width="1000" height="540" poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+                    <source src="<%=dsphim[0].url%>" type="video/mp4" />
+                    <source src="MY_VIDEO.webm" type="video/webm" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                    </p>
+                </video>
+
+                <script src="https://vjs.zencdn.net/7.7.5/video.js"></script>
+                <div class="comments">
+                    <h5 style="color: white;padding-top: 15px;margin-left: 23px;">COMMENTS</h5>
+                    <div class="fb-comments" data-href="http://localhost/DAT/CNPM/phim.html" data-width="1070" data-numposts="10"></div>
+                </div> -->
+                    <!-- <div class="bt-add-link">
+                        <a href="#"><button type="button" class="btn btn-warning">Thêm vào yêu thích</button></a>
+                        <a href="#"><button class="btn btn-danger">link 2</button></a>
+                    </div>
+                    <div class="comments">
+                        <h5 style="color: pink;padding-top: 15px;margin-left: 23px;">COMMENTS</h5>
+                        <div class="fb-comments" data-href="http://localhost/DAT/CNPM/phim.html" data-width="900" data-numposts="10"></div>
+                    </div> -->
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- kết thúc main -->
+        <!-- bắt đầu footer-->
+        <%- include('footer'); -%>
+            <!-- kết thúc footer -->
+
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        <%=title%>
+    </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/phim.css">
+</head>
+
+<body>
+    <!-- bắt đầu header -->
+    <%- include('header'); -%>
+        <!-- kết thúc header -->
+        <!-- Phim lẻ mới cập nhật -->
+        <div class="container-fluid" style="padding: 0%;">
+            <div class="main one">
+                <div class="nametypefilm2">
+                    <div class="name">
+                        <h3>
+                            <%=title.toUpperCase()%>
+                        </h3>
+                    </div>
+                </div>
+                <div class="row" style="margin: 10px 10px 0px 10px;">
+                    <% for(var i =0; i < dsphim.length; i++) { %>
+                        <div class="col-sm-3" style="padding: 20px;">
+                            <div class="filmfirst" style="text-align: center;">
+                                <a href="/phim/<%=dsphim[i].ten%>"> <img src="<%= dsphim[i].img %>"alt="phim1" style="width: 75%;"></a>
+                                <div class="content-top-film">
+                                    <h6 style="width: 100%;">
+                                        <%=dsphim[i].ten%>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+                <% if (pages > 0) { %>
+                    <ul class="pagination justify-content-center">
+                        <% if (current == 1) { %>
+                            <li class="page-item disabled"><a class="page-link">First</a></li>
+                            <% } else { %>
+                                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                <% } %>
+                                    <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                        <% if (i !== 1) { %>
+                                            <li class="disabled"><a>...</a></li>
+                                            <% } %>
+                                                <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                                    <% if (i == current) { %>
+                                                        <li class="active">
+                                                            <a class="page-link">
+                                                                <%= i %>
+                                                            </a>
+                                                        </li>
+                                                        <% } else { %>
+                                                            <li>
+                                                                <a class="page-link" href="?page=<%= i %>">
+                                                                    <%= i %>
+                                                                </a>
+                                                            </li>
+                                                            <% } %>
+                                                                <% if (i == Number(current) + 4 && i < pages) { %>
+                                                                    <li class="disabled"><a class="page-link">...</a></li>
+                                                                    <% } %>
+                                                                        <% } %>
+                                                                            <% if (current == pages) { %>
+                                                                                <li class=" disabled"><a class="page-link">Last</a></li>
+                                                                                <% } else { %>
+                                                                                    <li><a class="page-link" href="?page=<%= pages %>">Last</a></li>
+                                                                                    <% } %>
+                    </ul>
+                    <% } %>
+            </div>
+        </div>
+        </div>
+        <%- include('footer'); -%>
+</body>
+
+</html>

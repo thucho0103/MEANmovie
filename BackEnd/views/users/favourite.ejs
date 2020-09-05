@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phim yêu thích</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/phim.css">
+    <script src="/alertify.min.js"></script>
+    <!-- include the style -->
+    <link rel="stylesheet" href="/css/alertify.min.css" />
+    <!-- include a theme -->
+    <link rel="stylesheet" href="/css/themes/default.min.css" />
+</head>
+    <!-- bắt đầu header -->
+    <%- include('../products/header'); -%>
+        <!-- kết thúc header -->
+    <!-- bắt dầu main -->
+    <div class="container-fluid">
+        <div class="main one">
+            <div class="col-lg-12">
+                <div class="titel__farvorist__Film" style="border-bottom: 2px solid pink; padding-top:20px;">
+                    <h4 class="text-center" style="color: pink; ">Tủ Phim Yêu Thích Của Bạn</h4>
+                </div>
+                <div class="where__contain_Film">
+                    <% for(var i =0;i< dsphim.length;i++) { %>
+                        <br>
+                         <div class="image__farvorist__Film" style="display: flex;
+                         margin-top: 20px;
+                         margin-left: 50px;">
+                            <img src="<%=dsphim[i]%>" alt=""> </a>
+                         </div>
+                         <div class="icon-del">
+                            <p onclick="alertify.confirm('Xóa phim','Xác nhận xóa phim <%=dsphim[i].ten%> khỏi danh sách yêu thích', 
+                                async function(){ 
+                                $.ajax({
+                                  type: 'DELETE',
+                                  url:  '/users/deleteMovie',
+                                  data: {id : '<%=dsphim[i]%>'}
+                                  });
+                                  alertify.success('Xóa thành công');
+                                  await location.reload();
+                                }
+                                ,function(){ alertify.error('Không thành công')});" style="font-size: 20px; color: tomato;"><i class="fa fa-window-close"></i></p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- kết thúc main -->
+    <!-- bắt đầu footer -->
+    <%- include('../products/footer'); -%>
+    <!-- kết thúc footer -->
+</body>
+
+</html>
