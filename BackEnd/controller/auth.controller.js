@@ -69,31 +69,16 @@ module.exports.postRegister = function (req, res) {
     var email = req.body.email;
     const password = req.body.password;
     const confirmPW = req.body.confirm_password;
-<<<<<<< HEAD
-    if(password!=confirmPW) {  
-        //res.render('auth/register',{errors:"xác nhận mật khẩu không thành công"});       
-        return res.status(200).json({data:"xác nhận mật khẩu không thành công"});
-        }
-    Users.findOne({email:email})
-        .then(userDoc =>{
-            if(userDoc) {
-                var error = "email "+ email +" đã tồn tại ";
-                //res.render('auth/register', { errors : error});               
-                return res.status(200).json({data:error});
-=======
     if (password != confirmPW) {
-        //res.render('auth/register',{errors:"xác nhận mật khẩu không thành công"});
-        res.status(500).json({ message: "xác nhận mật khẩu không thành công" });
-        return;
+        //res.render('auth/register',{errors:"xác nhận mật khẩu không thành công"});       
+        return res.status(500).json({ message: "xác nhận mật khẩu không thành công" });
     }
     Users.findOne({ email: email })
         .then(userDoc => {
             if (userDoc) {
                 var error = "email " + email + " đã tồn tại.";
-                //res.render('auth/register', { errors : error});
-                res.status(500).json({ status: 500, data: {}, message: error });
-                return;
->>>>>>> d1a8723fb72288e3593c0dd0f7581b1b6253e32b
+                //res.render('auth/register', { errors : error});               
+                return res.status(500).json({ status: 500, data: {}, message: error });
             }
             console.log(password);
             return bcrypt.hash(password, 12);
