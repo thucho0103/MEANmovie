@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser =require('body-parser');
 var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
+var cors = require('cors')
 
 var productRoute = require('./router/products.route');
 var usersRoute = require('./router/users.route');
@@ -19,7 +20,9 @@ app.set('view engine','ejs');
 app.set('views','./views');
 
 app.use(express.static('./public'));
+app.use(cors())
 
+app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(urlencodedParser);
 app.use(cookieParser());

@@ -5,63 +5,71 @@ const JWT = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
-const encodedToken = (userId)=>{
+const encodedToken = (userId) => {
     return JWT.sign({
         sub: userId,
-        iat: new Date().getTime(),   
-        exp: new Date().setDate(new Date().getDate() + 1),    
-    },JWT_SECRET)
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate() + 1),
+    }, JWT_SECRET)
 };
 
-module.exports.auth = function(req, res){
+module.exports.auth = function (req, res) {
     res.render('auth/listUser');
 }
-module.exports.login = function(req, res){
-    res.render('auth/login',{errors:'0',values:''});
+module.exports.login = function (req, res) {
+    res.render('auth/login', { errors: '0', values: '' });
 }
-module.exports.postLogin = function(req,res){
+module.exports.postLogin = function (req, res) {
     const email = req.body.email;
     const password = req.body.password;
-    Users.findOne({email:email})
-        .then(user=>{
-            if(!user){
+    console.log(req.body.email);
+    console.log(req.body.password);
+    Users.findOne({ email: email })
+        .then(user => {
+            if (!user) {
                 //return res.render('auth/login',{errors:'Email không tồn tại', values:email});
-                return res.status(403).json({status:403,data:{},message:"Email không tồn tại"});
+                return res.status(403).json({ status: 403, data: {}, message: "Email không tồn tại" });
             }
-            bcrypt.compare(password,user.password)
-                .then(doMatch=>{
-                    if(doMatch){
-                        res.cookie('userId',user._id);                      
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        res.cookie('userId', user._id);
                         //return res.redirect('/');
                         const token = encodedToken(user._id);
-                        res.setHeader('Authorization',"Bearer "+token);
-                        return res.status(200).json({status:200,data:{},message:"suscess"});
+                        res.setHeader('accessToken', token);
+                        return res.status(200).json({
+                            status: 200, data: {
+                                'accessToken': token
+                            }, message: "suscess"
+                        });
                     }
                     //return res.render('auth/login',{errors:'Mật khẩu không đúng', values:email});
-                    return res.status(200).json({data:"Mật khẩu không đúng"});
+                    return res.status(401).json({ status: 401, data: {}, message: "Invalid password." });
                 })
-                .catch(err=>{
+                .catch(err => {
                     console.log(err);
-                    res.status(500).json({data:err});
+                    res.status(500).json({ data: err });
                 })
         })
-        .catch(err=>{
-            res.status(500).json({data:err});
+        .catch(err => {
+            res.status(500).json({ data: err });
             return console.log(err);
         });
-} 
-module.exports.logout = function(req, res){
+}
+module.exports.logout = function (req, res) {
     res.clearCookie('userId');
     //res.redirect('/');
-    return res.status(200).json({data:"suscess"});
+    return res.status(200).json({ data: "suscess" });
 }
-module.exports.register = function(req, res){
-    res.render('auth/register',{errors:"0",values:""});
+module.exports.register = function (req, res) {
+    res.render('auth/register', { errors: "0", values: "" });
 }
-module.exports.postRegister = function(req,res){
+module.exports.postRegister = function (req, res) {
+    console.log(req.body);
     var email = req.body.email;
     const password = req.body.password;
     const confirmPW = req.body.confirm_password;
+<<<<<<< HEAD
     if(password!=confirmPW) {  
         //res.render('auth/register',{errors:"xác nhận mật khẩu không thành công"});       
         return res.status(200).json({data:"xác nhận mật khẩu không thành công"});
@@ -72,72 +80,87 @@ module.exports.postRegister = function(req,res){
                 var error = "email "+ email +" đã tồn tại ";
                 //res.render('auth/register', { errors : error});               
                 return res.status(200).json({data:error});
+=======
+    if (password != confirmPW) {
+        //res.render('auth/register',{errors:"xác nhận mật khẩu không thành công"});
+        res.status(500).json({ message: "xác nhận mật khẩu không thành công" });
+        return;
+    }
+    Users.findOne({ email: email })
+        .then(userDoc => {
+            if (userDoc) {
+                var error = "email " + email + " đã tồn tại.";
+                //res.render('auth/register', { errors : error});
+                res.status(500).json({ status: 500, data: {}, message: error });
+                return;
+>>>>>>> d1a8723fb72288e3593c0dd0f7581b1b6253e32b
             }
             console.log(password);
-            return bcrypt.hash(password,12);
+            return bcrypt.hash(password, 12);
         })
-        .then(hashPassword =>{
+        .then(hashPassword => {
             const user = new Users({
-                email:req.body.email,
-                userName:req.body.userName,
-                password:hashPassword,
+                email: req.body.email,
+                userName: req.body.userName,
+                password: hashPassword,
                 dateCreate: new Date().toDateString(),
             });
+            console.log("fgdfsgdfs");
             return user.save();
         })
-        .then(result=>{
+        .then(result => {
             //res.redirect('/auth/login');
-            res.status(200).json({data:"suscess"});
+            res.status(200).json({ data: "suscess" });
         })
-        .catch(err=>{
-            res.status(500).json({data:err});
+        .catch(err => {
+            res.status(500).json({ data: err });
             return console.log(err);
         })
 }
 
-module.exports.Reset = function(req,res){
-    res.render('auth/reset',{errors:'0',values:''});
+module.exports.Reset = function (req, res) {
+    res.render('auth/reset', { errors: '0', values: '' });
 }
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
-module.exports.postReset = function(req,res){
+module.exports.postReset = function (req, res) {
     const email = req.body.email;
-    crypto.randomBytes(32,(err,Buffer) =>{
-        if(err) {
-            console.log(err);            
+    crypto.randomBytes(32, (err, Buffer) => {
+        if (err) {
+            console.log(err);
             //return redirect('auth/reset');
-            return res.status(500).json({data:err});
+            return res.status(500).json({ data: err });
         }
         const token = Buffer.toString('hex');
-        Users.findOne({email:email})
-            .then(user=>{
-                if(user){
+        Users.findOne({ email: email })
+            .then(user => {
+                if (user) {
                     user.resetToken = token;
                     user.resetTokenExp = Date.now() + 3600000;
                     return user.save();
                 }
                 //return res.render('auth/reset',{errors:'Email không tồn tại trong hệ thống',values:email});
-                return res.status(200).json({data:"Email không tồn tại trong hệ thống"});
+                return res.status(200).json({ data: "Email không tồn tại trong hệ thống" });
             })
-            .then(result=>{
-                if(result){
+            .then(result => {
+                if (result) {
                     //res.render('auth/reset',{errors:'Gửi thành công!',values:email});
-                    res.status(200).json({data:"Gửi thành công!"});
+                    res.status(200).json({ data: "Gửi thành công!" });
                     const msg = {
-                    to: email,
-                    from: 'teadragon@movie.com',
-                    subject: 'Sending with Movie+',
-                    html: `
+                        to: email,
+                        from: 'teadragon@movie.com',
+                        subject: 'Sending with Movie+',
+                        html: `
                         <p> Yêu cầu lấy lại mật khẩu </p>
                         <p> Click vào <a href="https://teamovie.herokuapp.com/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
                     `
                     };
-                sgMail.send(msg);
+                    sgMail.send(msg);
                 }
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err);
-                res.status(500).json({data:err});
+                res.status(500).json({ data: err });
             })
     });
 }
@@ -166,44 +189,44 @@ module.exports.postReset = function(req,res){
 //         }
 //     });
 // }
-module.exports.newPassword = function(req,res){
+module.exports.newPassword = function (req, res) {
     const token = req.params.token;
-    Users.findOne({resetToken:token})
-        .then(user =>{
+    Users.findOne({ resetToken: token })
+        .then(user => {
             console.log(user);
-            if(user){
-               //return res.render('auth/newPw',{email : user.email,token:token});
-               return res.status(200).json({data : token});
-            }           
-                //return res.redirect('/');
-                return res.status(404).json({data : "Không tìm thấy"});
+            if (user) {
+                //return res.render('auth/newPw',{email : user.email,token:token});
+                return res.status(200).json({ data: token });
+            }
+            //return res.redirect('/');
+            return res.status(404).json({ data: "Không tìm thấy" });
         })
-        .catch(err=>{
-            res.status(404).json({data : err});
+        .catch(err => {
+            res.status(404).json({ data: err });
             console.log(err);
         })
 }
-module.exports.postNewPassword = function(req,res){
+module.exports.postNewPassword = function (req, res) {
     const token = req.body.token;
     const newPassword = req.body.password;
     let resetUser;
-    Users.findOne({resetToken:token})
-        .then(user=>{
-            resetUser= user;
-            return bcrypt.hash(newPassword,12);
+    Users.findOne({ resetToken: token })
+        .then(user => {
+            resetUser = user;
+            return bcrypt.hash(newPassword, 12);
         })
-        .then(hashPassword =>{
+        .then(hashPassword => {
             resetUser.password = hashPassword;
             resetUser.resetToken = undefined;
             resetUser.resetTokenExp = undefined;
             return resetUser.save();
         })
-        .then(result=>{
+        .then(result => {
             //res.redirect('/auth/login');
-            res.status(200).json({data : "susscess"});
+            res.status(200).json({ data: "susscess" });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
-            res.status(200).json({data : err});
+            res.status(200).json({ data: err });
         })
 }
