@@ -14,13 +14,9 @@ route.get('/phimbo',passport.authenticate('jwt',{session : false}),controller.ph
 route.get('/phimle',passport.authenticate('jwt',{session : false}),controller.phimle);
 route.get('/theloai/:type',controller.type);
 route.get('/xemphim/:item',authMiddleware.requireAuth,controller.xemphim);
-// route.post('/create',controller.postCreate);
+//route.post('/create',controller.postCreate);
 route.get('/search',controller.search);
-// route.get('/create',controller.create);
-// // create application/json parser
-// var jsonParser = bodyParser.json()
- 
-// // create application/x-www-form-urlencoded parser
-// route.post('/create',controller.postCreate);
+//route.get('/changemovie',controller.ChangeData);
+
 
 module.exports = route;

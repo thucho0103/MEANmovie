@@ -1,20 +1,11 @@
 var Product = require('../models/products.model');
 const Products = require('../models/products.model');
+const Movies = require('../models/movie.model');
+const Users = require('../models/users.model');
 // var bodyParser =require('body-parser');
 
-module.exports.index =  function(req, res){
-    // Product
-    //     .find({},function(err,data){
-    //         if(err) throw err;
-    //         var phimle = data.filter(function(phim){
-    //             return phim.phanloai ==="phimle"
-    //         });
-    //         var phimbo = data.filter(function(phim){
-    //             return phim.phanloai ==="phimbo"
-    //         });
-    //         res.render('products/index', { title:"Movie+", phimle: phimle, phimbo:phimbo });
-    //     }); 
-    Product
+module.exports.index =  function(req, res){ 
+    Movies
         .find({})
         .limit(8)
         .exec(function(err,data){
@@ -23,7 +14,7 @@ module.exports.index =  function(req, res){
 }
 module.exports.phim = function(req, res){
     // console.log(req.params.item);
-    Product.find({ten:req.params.item},function(err,data){
+    Movies.find({ten:req.params.item},function(err,data){
         if(err) throw err;
         // console.log(data);
         var infor = data[0].thongtin.split('|');
@@ -33,7 +24,7 @@ module.exports.phim = function(req, res){
 }
 module.exports.xemphim = function(req, res){
     // console.log(req.params.item);
-    Product.find({ten:req.params.item},function(err,data){
+    Movies.find({title:req.params.item},function(err,data){
         if(err) throw err;
         // console.log(data);
         res.render('products/xemphim',{ title:"Xemphim",dsphim: data});
@@ -43,12 +34,12 @@ module.exports.xemphim = function(req, res){
 module.exports.phimbo = function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
-    Product
-        .find({"phanloai":"phimbo"})
+    Movies
+        .find({"category":"phimbo"})
         .skip((perPage * page) - perPage)
         .limit(perPage)
         .exec(function(err,data){
-            Product.countDocuments({"phanloai":"phimbo"}).exec(function(err,count){
+            Movies.countDocuments({"category":"phimbo"}).exec(function(err,count){
                 if (err) return next (err)
                 //console.log(count);
                 res.status(200).json({data:data});
@@ -64,13 +55,12 @@ module.exports.phimbo = function(req, res){
 module.exports.phimle = function(req,res){
     var perPage = 8;
     var page = req.query.page || 1;
-    console.log("abcd");
-    Product
-        .find({"phanloai":"phimle"})
+    Movies
+        .find({"category":"phimle"})
         .skip((perPage * page) - perPage)
         .limit(perPage)
         .exec(function(err,data){
-            Product.countDocuments({"phanloai":"phimle"}).exec(function(err,count){
+            Movies.countDocuments({"category":"phimle"}).exec(function(err,count){
                 if (err) return next (err)
                 //console.log(count);
                 res.status(200).json({data:data});
@@ -82,7 +72,51 @@ module.exports.phimle = function(req,res){
             })
         })
 }
-
+// module.exports.ChangeData = function(req,res){
+//     var perPage = 100;
+//     var page = req.query.page || 1;
+//     console.log("abcd");
+//     Movies
+//         .find({})
+//         .skip((perPage * page) - perPage)
+//         .limit(perPage)
+//         .exec(function(err,data){
+//             Movies.countDocuments({}).exec(function(err,count){
+//                 if (err) return next (err)            
+//                 res.status(200).json({data:data});        
+//             })
+//         })
+// }
+// module.exports.ChangeData = function(req,res){
+//     var perPage = 100;
+//     var page = req.query.page || 1;
+//     console.log("abcd");
+//     Product
+//         .find({"phanloai":"phimle"})
+//         .skip((perPage * page) - perPage)
+//         .limit(perPage)
+//         .exec(function(err,data){
+//             Product.countDocuments({}).exec(function(err,count){
+//                 if (err) return next (err)
+//                 //console.log(count);
+//                 //res.status(200).json({data:data});
+//                 for (let index = 0; index < data.length; index++) {
+//                     const element = data[index];
+//                     const movie = new Movies({
+//                         title : element.ten,
+//                         year : '',
+//                         kind : element.theloai,
+//                         category : element.phanloai,
+//                         description : element.thongtin,
+//                         source : element.url,
+//                         imageSource : element.img,                       
+//                     });
+//                     movie.save();
+//                 }
+//                 res.json({"message":"sussecc"})               
+//             })
+//         })
+// }
 module.exports.type =   function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
@@ -115,11 +149,11 @@ module.exports.type =   function(req, res){
       }
     // Product.find({"theloai":type},function(err,data){
     // if(err) throw err;
-    Product.find({"phanloai":type})
+    Movies.find({"category":type})
     .skip((perPage * page) - perPage)
     .limit(perPage)
     .exec(function(err,data){
-        Product.countDocuments({"phanloai":type}).exec(function(err,count){
+        Movies.countDocuments({"category":type}).exec(function(err,count){
             if (err) return next (err)
             //console.log(count);
             res.render('products/phim', {
@@ -140,7 +174,7 @@ module.exports.type =   function(req, res){
 module.exports.search = function(req,res){
     var s = req.query.search;
     console.log(s);
-    Product.find({},function(err,data){
+    Movies.find({},function(err,data){
         if(err) throw err;
         {
         var matchedUsers = data.filter(function(user){

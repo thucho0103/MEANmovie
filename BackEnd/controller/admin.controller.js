@@ -3,7 +3,20 @@ var Product = require('../models/products.model');
 var Users = require('../models/users.model');
 var axios = require('axios');
 var cheerio = require('cheerio');
+const bcrypt = require('bcrypt');
 const Products = require('../models/products.model');
+
+const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
+
+const encodedToken = (userId) => {
+    return JWT.sign({
+        sub: userId,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate() + 1),
+    }, JWT_SECRET)
+};
+
+
 // index of admin
 module.exports.index = function(req,res){
     var perPage = 10;
@@ -30,26 +43,32 @@ module.exports.login = function(req, res){
 module.exports.postLogin = function(req,res){
     var userName = req.body.username;
     var password = req.body.password;
-    // console.log(email+" "+ password);
-    Admin.find({userName: userName}, function(err,data){
-        if(err) throw err;
-            // console.log(data);
-            if(!data.length) 
-            {
-            var errors=['tài khoản admin không tồn tại'];
-            res.render('admin/login', { errors : errors, values : req.body});
-            return;
-            } 
-            if(data[0].password !== password) 
-            {
-                var errors=['mật khẩu vừa nhập không đúng'];
-                res.render('admin/login', { errors : errors, values : req.body});
-                return;
+    //console.log(userName+" "+ password);
+    Admin.findOne({ userName: userName })
+        .then(user => {
+            if (!user) {
+                //return res.render('auth/login',{errors:'Email không tồn tại', values:email});
+                return res.status(403).json({ status: 403, data: {}, message: "Admin không tồn tại" });
             }
-            // console.log(data[0]._id);
-            res.cookie('adminId', data[0]._id);
-            res.redirect('/admin');   
-    });
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        res.cookie('userId', user._id);
+                        //return res.redirect('/');
+                        
+                    }
+                    //return res.render('auth/login',{errors:'Mật khẩu không đúng', values:email});
+                    return res.status(401).json({ status: 401, data: {}, message: "Invalid password." });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({ data: err });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({ data: err });
+            return console.log(err);
+        });
 }
 // logout
 module.exports.logout = function(req, res){

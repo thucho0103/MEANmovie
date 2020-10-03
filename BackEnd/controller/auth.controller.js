@@ -90,7 +90,6 @@ module.exports.postRegister = function (req, res) {
                 password: hashPassword,
                 dateCreate: new Date().toDateString(),
             });
-            console.log("fgdfsgdfs");
             return user.save();
         })
         .then(result => {
