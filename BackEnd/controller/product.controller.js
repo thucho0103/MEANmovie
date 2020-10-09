@@ -41,13 +41,7 @@ module.exports.phimbo = function(req, res){
         .exec(function(err,data){
             Movies.countDocuments({"category":"phimbo"}).exec(function(err,count){
                 if (err) return next (err)
-                //console.log(count);
-                res.status(200).json({data:data});
-                // res.render('products/phim', {
-                // title:"Phim bộ", 
-                // dsphim: data , 
-                // current: page,
-                // pages: Math.ceil(count/perPage)});
+                res.status(200).send(data);
             })
         })
 }
@@ -62,13 +56,7 @@ module.exports.phimle = function(req,res){
         .exec(function(err,data){
             Movies.countDocuments({"category":"phimle"}).exec(function(err,count){
                 if (err) return next (err)
-                //console.log(count);
-                res.status(200).json({data:data});
-                // res.render('products/phim', {
-                // title:"Phim lẻ", 
-                // dsphim: data , 
-                // current: page,
-                // pages: Math.ceil(count/perPage)});
+                res.status(200).send(data);                
             })
         })
 }
