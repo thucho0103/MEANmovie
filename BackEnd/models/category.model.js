@@ -1,21 +1,15 @@
-var express = require('express');
-
 var mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
 
 // mongoose.connect('mongodb://localhost:27017/demo', {useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connect('mongodb+srv://movie:admin@movie-aoto6.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
-var productSchema = new mongoose.Schema({
-    ten :String,
-    img :String,
-    poster:String,
-    theloai:String,
-    phanloai:[String],
-    thongtin:String,
-    url: String,
-    mota: String,
+mongoose.plugin(slug);   
+var categorySchema = new mongoose.Schema({
+    category:String,   
+    slug :{type: String, slug : "category"},
 })
 // var list = mongoose.model('list', listSchema);
-var Products = mongoose.model('Product',productSchema, 'dsphim');
+var Category = mongoose.model('Category',categorySchema, 'listCategory');
 
-module.exports = Products;
+module.exports = Category;

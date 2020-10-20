@@ -10,7 +10,8 @@ var authRoute = require('./router/auth.route');
 var adminRoute = require('./router/admin.route');
 
 // var authMiddleware = require('./middlewares/auth.middlerware');
-var userMiddleware = require('./middlewares/user.middleware');
+var passport = require('passport');
+const passportConfig = require('./middlewares/passport.middleware');
 
 var port = process.env.PORT || 3000;
 
@@ -28,7 +29,7 @@ app.use(urlencodedParser);
 app.use(cookieParser());
 // app.use(showUser.showUser);
 // Route 
-app.use('/',userMiddleware.requireUser,productRoute);
+app.use('/',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',usersRoute);
 app.use('/auth',authRoute);
 app.use('/admin',adminRoute);

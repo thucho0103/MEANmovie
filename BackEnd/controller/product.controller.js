@@ -1,7 +1,7 @@
 var Product = require('../models/products.model');
 const Products = require('../models/products.model');
 const Movies = require('../models/movie.model');
-const Users = require('../models/users.model');
+const Category = require('../models/category.model');
 // var bodyParser =require('body-parser');
 
 module.exports.index =  function(req, res){ 
@@ -13,21 +13,29 @@ module.exports.index =  function(req, res){
         })
 }
 module.exports.phim = function(req, res){
-    // console.log(req.params.item);
-    Movies.find({ten:req.params.item},function(err,data){
+    Movies.findOne({slug:req.params.item},function(err,data){
         if(err) throw err;
-        // console.log(data);
-        var infor = data[0].thongtin.split('|');
-        //console.log(infor);
-        res.render('products/view',{ title:"Xemphim",dsphim: data, infor : infor});
+        res.send(data);
     });
 }
-module.exports.xemphim = function(req, res){
-    // console.log(req.params.item);
-    Movies.find({title:req.params.item},function(err,data){
+
+module.exports.addCategories = function(req, res){  
+    const newCategory = req.body.Category;
+    const cate = new Category({
+        category:Category
+    });
+    cate.save();    
+    res.send("success");
+}
+
+module.exports.getCategories = function(req, res){   
+    Category.find({}).exec(function(err,data){              
         if(err) throw err;
-        // console.log(data);
-        res.render('products/xemphim',{ title:"Xemphim",dsphim: data});
+        const ListCategories = [];
+        data.forEach(element => {
+            ListCategories.push(element.category);
+        });
+        res.send(ListCategories);
     });
 }
 
@@ -105,7 +113,7 @@ module.exports.phimle = function(req,res){
 //             })
 //         })
 // }
-module.exports.type =   function(req, res){
+module.exports.type = function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
     let type = req.params.type;
