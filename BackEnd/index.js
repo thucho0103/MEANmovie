@@ -29,7 +29,7 @@ app.use(urlencodedParser);
 app.use(cookieParser());
 // app.use(showUser.showUser);
 // Route 
-app.use('/',passport.authenticate('jwt',{session : false}),productRoute);
+app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',usersRoute);
 app.use('/auth',authRoute);
 app.use('/admin',adminRoute);
