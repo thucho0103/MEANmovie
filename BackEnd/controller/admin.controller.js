@@ -5,6 +5,7 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
 const Products = require('../models/products.model');
+const Movie = require('../models/movie.model');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
@@ -329,14 +330,14 @@ function getlink(link, url){
         var img = $('.movie-l-img > img ').attr('src');
         var type = change_alias(arr1[arr1.length-2]);
         var product = {
-            ten: ten,
-            img:img,
-            theloai:arr1[arr1.length-2],
-            phanloai:type.split(','),
-            thongtin:t,
-            mota:content,
-            url:url,
+            title: ten,
+            imageSource:img,
+            kind:arr1[arr1.length-2],
+            category:type.split(','),
+            description:content,
+            source:url,
         }
-        var newProduct = Product(product).save();
+        console.log(product);
+        var newProduct = Movie(product).save();
     })
 }
