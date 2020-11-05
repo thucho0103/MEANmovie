@@ -117,7 +117,6 @@ module.exports.type = function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
     let type = req.params.type;
- 
     Movies.find({"category":type})
     .skip((perPage * page) - perPage)
     .limit(perPage)

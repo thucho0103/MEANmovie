@@ -13,8 +13,13 @@ route.get('/watch/:item',controller.phim);
 route.get('/phimbo',controller.phimbo);
 route.get('/phimle',controller.phimle);
 route.get('/categories/getcategories',controller.getCategories);
+<<<<<<< HEAD
 route.get('/categories/add',controller.addCategories);
 route.get('/type/:type',controller.type);
+=======
+route.post('/categories/add',controller.addCategories);
+route.get('/categories/:type',controller.type);
+>>>>>>> 50d311fd230d7361e820d8d2854ed93b356985f4
 //route.post('/create',controller.postCreate);
 route.get('/search',controller.search);
 //route.get('/changemovie',controller.ChangeData);
