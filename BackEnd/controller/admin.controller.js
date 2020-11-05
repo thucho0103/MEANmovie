@@ -4,7 +4,7 @@ var Users = require('../models/users.model');
 var axios = require('axios');
 var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
-const Products = require('../models/products.model');
+const Movie = require('../models/movie.model');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
@@ -54,8 +54,7 @@ module.exports.postLogin = function(req,res){
                 .then(doMatch => {
                     if (doMatch) {
                         res.cookie('userId', user._id);
-                        //return res.redirect('/');
-                        
+                        //return res.redirect('/');                      
                     }
                     //return res.render('auth/login',{errors:'Mật khẩu không đúng', values:email});
                     return res.status(401).json({ status: 401, data: {}, message: "Invalid password." });
@@ -79,64 +78,33 @@ module.exports.logout = function(req, res){
 module.exports.createProduct = function(req, res){
     res.render('admin/createMovie',{errors:'0'});
 }
-module.exports.postCreateproduct = function(req,res){
-    //console.log(req.body.ten);
-    Product.find({ten: req.body.ten}, function(err,data) {
-        var errors = ['tên phim đã tồn tại'];
-        if(data.length){
-            res.render('admin/createMovie',{errors:errors});
-            return;
-        }
-        //var theloai = change_alias(req.body.theloai);
-        //console.log(theloai);
-        var vientuong = req.body.phimvientuong;
-        var thanthoai = req.body.phimthanthoai;
-        var giadinh = req.body.phimgiadinh;
-        var hanhdong = req.body.phimhanhdong;
-        var trinhtham = req.body.phimtrinhtham;
-        var kinhdi = req.body.phimkinhdi;
-        var cotrang = req.body.phimcotrang;
-        var haihuoc = req.body.phimhaihuoc;
-        var hoathinh = req.body.phimhoathinh;
-        var phimle = req.body.phimle;
-        var phimbo = req.body.phimbo;
-        var phanloai = [];
-        if(vientuong=='on') phanloai.push('phimvientuong'); 
-        if(thanthoai=='on') phanloai.push('phimthanthoai');  
-        if(giadinh=='on')   phanloai.push('phimgiadinh');
-        if(hanhdong=='on')  phanloai.push('phimhanhdong');
-        if(trinhtham=='on') phanloai.push('phimtrinhtham');  
-        if(kinhdi=='on')    phanloai.push('phimkinhdi');  
-        if(cotrang=='on')   phanloai.push('phimcotrang'); 
-        if(haihuoc=='on')   phanloai.push('phimhaihuoc'); 
-        if(hoathinh=='on')  phanloai.push('phimhoathinh');  
-        if(phimle=='on')    phanloai.push('phimle'); 
-        if(phimbo=='on')    phanloai.push('phimbo'); 
-        console.log(kinhdi);
-        var newphim = {
-            ten : req.body.ten,
-            img : req.body.img,
-            theloai : req.body.theloai,
-            // phanloai: theloai.split(','),
-            phanloai :phanloai,
-            thongtin:req.body.thongtin,
-            url: req.body.url,
-            mota: req.body.mota,
-        };
-        var newProduct = Product(newphim).save(function(err,data){
-            if (err) throw err;
-            res.redirect('/admin');
-        });
-    });
+module.exports.postCreateproduct = function(req,res){ 
+    Movie.find({title:req.body.title})
+        .then(data =>{
+            if(data.length){
+                return res.status(200).json({ message: "Tên phim đã tồn tại" });
+            }           
+            var movie = {
+                title : req.body.title,
+                year: req.body.year,
+                kind: req.body.kind,
+                category: req.body.category.split(","),
+                description: req.body.description,
+                source: req.body.source.split(","),
+                poster: req.body.poster,
+                imageSource: req.body.imageSource,
+                dateUpdate : req.body.dateUpdate,
+            }
+            var newMovie = Movie(movie)
+            .save(function(err,data){
+                if (err) throw err;
+                return res.status(200).json({ message: "Thêm phim thành công" });
+            });
+        })
+        .catch(err => {                     
+            return res.status(500).json({ message: err });
+        }); 
 }
-// edit product
-// module.exports.editProduct = function(req, res){
-//     Product.findOne({_id:req.params.item},function(err,data){
-//         if (err) throw err;
-//         console.log(data.phanloai[i]);
-//         res.render('admin/editMovie',{values:data});
-//     });
-// }
 module.exports.editProduct = function(req, res){
     Products.findOne({_id:req.params.item})
             .then(data =>{
@@ -148,58 +116,38 @@ module.exports.editProduct = function(req, res){
             })
 }
 module.exports.postEditproduct = function(req,res){
-    //var phanloai = change_alias(req.body.theloai);
-    var vientuong = req.body.phimvientuong;
-    var thanthoai = req.body.phimthanthoai;
-    var giadinh = req.body.phimgiadinh;
-    var hanhdong = req.body.phimhanhdong;
-    var trinhtham = req.body.phimtrinhtham;
-    var kinhdi = req.body.phimkinhdi;
-    var cotrang = req.body.phimcotrang;
-    var haihuoc = req.body.phimhaihuoc;
-    var hoathinh = req.body.phimhoathinh;
-    var phimle = req.body.phimle;
-    var phimbo = req.body.phimbo;
-    console.log(kinhdi);
-    Product.findOne({_id: req.body.id})
-        .then(product=>{
-            product.ten = req.body.ten;
-            product.img = req.body.img;
-            product.theloai = req.body.theloai;
-            product.phanloai = [];
+    Movie.findOne({_id: req.body.id})
+        .then(movie=>{
+            movie.title = req.body.title;
+            movie.year = req.body.year;
+            movie.kind = req.body.kind;
+            movie.category = req.body.category.split(",");
+            movie.description = req.body.description;
+            movie.source = req.body.source.split(",");
+            movie.poster = req.body.poster;
+            movie.imageSource = req.body.image_source;
+            movie.imageSource = req.body.date_update;
             
-            if(vientuong=='on') product.phanloai.push('phimvientuong'); 
-            if(thanthoai=='on') product.phanloai.push('phimthanthoai');  
-            if(giadinh=='on')   product.phanloai.push('phimgiadinh');
-            if(hanhdong=='on')  product.phanloai.push('phimhanhdong');
-            if(trinhtham=='on') product.phanloai.push('phimtrinhtham');  
-            if(kinhdi=='on')    product.phanloai.push('phimkinhdi');  
-            if(cotrang=='on')   product.phanloai.push('phimcotrang'); 
-            if(haihuoc=='on')   product.phanloai.push('phimhaihuoc'); 
-            if(hoathinh=='on')   product.phanloai.push('phimhoathinh');  
-            if(phimle=='on')   product.phanloai.push('phimle'); 
-            if(phimbo=='on')   product.phanloai.push('phimbo'); 
-
-            //product.phanloai = phanloai.split(',');
-            product.thongtin = req.body.thongtin;
-            product.url = req.body.url;
-            product.mota = req.body.mota;
-            product.save();
+            movie.save();           
         })
         .then(result =>{
-            res.redirect('/admin');
+            return res.status(200).json({message : "Cập nhật thành công"});
         })
         .catch(err=>{
-            console.log(err);
+            return res.status(500).json({message : "Cập nhật thất bại"})
         })
+    
 }
 // delete product
 module.exports.deleteProduct = function(req,res){
     Product.findOne({_id: req.body.id}).deleteOne(function(err,data){
-        if(err) throw err;
-        res.redirect("/admin");
+        if(err){
+            return res.status(500).json({message : err});
+        } 
+        else{
+            return res.status(200).json({message : "Xoá thành công"});
+        }
     });
-    // console.log(req.body.id);
 }
 // create user
 module.exports.createUser = function(req, res){

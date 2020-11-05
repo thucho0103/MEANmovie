@@ -9,7 +9,7 @@ mongoose.plugin(slug);
 var movieSchema = new mongoose.Schema({
     title :String,
     slug :{type: String, slug : "title"},
-    year: Date,
+    year: String,
     kind: String,
     category:[String],
     description: String,

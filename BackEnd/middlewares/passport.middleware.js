@@ -8,8 +8,8 @@ passport.use(new JwtStrategy({
     secretOrKey:JWT_SECRET,
     },(payload,done)=>{  
         try{
-            console.log(payload);
-            done(null,true);
+            //console.log(payload);
+            done(null,payload);
         }
         catch(error){
             done(error,false);

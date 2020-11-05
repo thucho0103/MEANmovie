@@ -5,11 +5,11 @@ const JWT = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
-const encodedToken = (userId) => {
+const encodedToken = (userId,Mail) => {
     return JWT.sign({
         sub: userId,
         iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate() + 1),
+        exp: new Date().setDate(new Date().getDate() + 1)
     }, JWT_SECRET)
 };
 
@@ -35,7 +35,7 @@ module.exports.postLogin = function (req, res) {
                     if (doMatch) {
                         res.cookie('userId', user._id);
                         //return res.redirect('/');
-                        const token = encodedToken(user._id);
+                        const token = encodedToken(user._id,user.email);
                         res.setHeader('accessToken', token);
                         return res.status(200).json({
                             status: 200, data: {
@@ -64,6 +64,26 @@ module.exports.logout = function (req, res) {
 module.exports.register = function (req, res) {
     res.render('auth/register', { errors: "0", values: "" });
 }
+module.exports.CheckEmail = function (req, res) {
+    var email = req.body.email;   
+    Users.findOne({ email: email })
+        .then(userDoc => {
+            if (userDoc) {
+                var error = "email " + email + " đã tồn tại.";
+                //res.render('auth/register', { errors : error});               
+                return res.status(400).json({ status: 400, data: {}, message: error });
+            }
+            console.log(password);
+        })       
+        .then(result => {
+            //res.redirect('/auth/login');
+            return res.status(200).json({ data: "email có thể sử dụng" });
+        })
+        .catch(err => {           
+            return res.status(500).json({ data: err });
+        })
+}
+
 module.exports.postRegister = function (req, res) {
     console.log(req.body);
     var email = req.body.email;
@@ -186,7 +206,7 @@ module.exports.newPassword = function (req, res) {
             return res.status(404).json({ data: "Không tìm thấy" });
         })
         .catch(err => {
-            res.status(404).json({ data: err });
+            res.status(500).json({ data: err });
             console.log(err);
         })
 }
@@ -211,6 +231,6 @@ module.exports.postNewPassword = function (req, res) {
         })
         .catch(err => {
             console.log(err);
-            res.status(200).json({ data: err });
+            res.status(500).json({ data: err });
         })
 }

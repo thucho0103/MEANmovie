@@ -9,12 +9,12 @@ const passportConfig = require('../middlewares/passport.middleware');
 
 route.get('/',userMiddleware.requireUser,controller.index);
 
-route.get('/phim/:item',controller.phim);
+route.get('/watch/:item',controller.phim);
 route.get('/phimbo',controller.phimbo);
 route.get('/phimle',controller.phimle);
 route.get('/categories/getcategories',controller.getCategories);
 route.get('/categories/add',controller.addCategories);
-route.get('/theloai/:type',controller.type);
+route.get('/type/:type',controller.type);
 //route.post('/create',controller.postCreate);
 route.get('/search',controller.search);
 //route.get('/changemovie',controller.ChangeData);

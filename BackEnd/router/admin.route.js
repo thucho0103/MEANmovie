@@ -6,7 +6,7 @@ var controller = require('../controller/admin.controller');
 var authMiddleware = require('../middlewares/admin.middlerware');
 
 // route.get('/',authMiddleware.requireAuth,controller.index);
-route.get('/',authMiddleware.requireAuth,controller.index);
+route.get('/',controller.index);
 
 route.get('/login',controller.login);
 route.post('/login',controller.postLogin);

@@ -8,6 +8,7 @@ var productRoute = require('./router/products.route');
 var usersRoute = require('./router/users.route');
 var authRoute = require('./router/auth.route');
 var adminRoute = require('./router/admin.route');
+var paymentRoute = require('./router/payment.route');
 
 // var authMiddleware = require('./middlewares/auth.middlerware');
 var passport = require('passport');
@@ -33,6 +34,7 @@ app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',usersRoute);
 app.use('/auth',authRoute);
 app.use('/admin',adminRoute);
+app.use('/payment',passport.authenticate('jwt',{session : false}),paymentRoute);
 
 // app.get('/',userMiddleware.requireUser,function(req, res){
 //     res.render('products/index');

@@ -117,80 +117,34 @@ module.exports.type = function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
     let type = req.params.type;
-    //console.log(req.params.type);
-    let title;
-    switch(type) {
-        case 'phimgiadinh':
-            title = "phim gia đình"; break;
-        case 'phimhanhdong':
-            title = "phim hành động"; break;
-        case 'phimvientuong':
-            title = "phim viễn tưởng";break;
-        case 'phimchientranh':
-            title = "phim chiến tranh";break;
-        case 'phimhoathinh':
-            title = "phim hoạt hình";break;
-        case 'phimthanthoai':
-            title = "phim thần thoại";break;
-        case 'phimhaihuoc':
-            title = "phim hài hước";break;
-        case 'phimcotrang':
-            title = "phim cổ trang";break;
-        case 'phimphieuluu':
-            title = "phim phiêu lưu";break;
-            case 'phimkinhdi':
-                title = "phim kinh dị";break;
-        default:
-            title = "phim khác"; break;
-      }
-    // Product.find({"theloai":type},function(err,data){
-    // if(err) throw err;
+ 
     Movies.find({"category":type})
     .skip((perPage * page) - perPage)
     .limit(perPage)
     .exec(function(err,data){
         Movies.countDocuments({"category":type}).exec(function(err,count){
-            if (err) return next (err)
-            //console.log(count);
-            res.render('products/phim', {
-            title:title, 
-            dsphim: data , 
-            current: page,
-            pages: Math.ceil(count/perPage)});
+            if (err) {
+                return res.status(500).json({message: "Error"});
+            }           
+            //console.log(count);s
+            // res.render('products/phim', {
+            // title:title, 
+            // dsphim: data , 
+            // current: page,
+            // pages: Math.ceil(count/perPage)});
+            console.log(req.user.sub);
+            res.status(200).send(data);
         })
     })
-    
-    // res.render('products/search', {
-    //     title:title,
-    //     dsphim : data,
-    //     });
-    // });
 }
 
 module.exports.search = function(req,res){
     var s = req.query.search;
     console.log(s);
-    Movies.find({},function(err,data){
+    Movies.find({"slug": new RegExp(req.query.search, 'i') },function(err,data){
         if(err) throw err;
-        {
-        var matchedUsers = data.filter(function(user){
-            return user.ten.toLowerCase().indexOf(s.toLowerCase()) !== -1;
-        })
-            var title = "Tìm kiếm";
-            if(matchedUsers.length==0) {
-                title = "Không tìm thấy";
-            }
-            res.render('products/search', {title:title,
-                dsphim: matchedUsers,
-              });
-        } 
+        res.send(data);
     })
-    // var matchedUsers = modelProduct.find({name}).val().filter(function(user) {
-    // return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-    //  });
-//     res.render('products/listMovie', {
-//     lists: matchedUsers
-//   });
 }
 
 // var urlencodedParser = bodyParser.urlencoded({ extended: false })
