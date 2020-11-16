@@ -6,6 +6,7 @@ var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
 const Products = require('../models/products.model');
 const Movie = require('../models/movie.model');
+const JWT = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
@@ -31,7 +32,7 @@ module.exports.index = function(req,res){
                 if (err) return next (err)
                 //console.log(count);
                 res.render('admin/dashboad', {
-                dsphim: data , 
+                dsphim: data, 
                 current: page,
                 pages: Math.ceil(count/perPage)});
             })
@@ -53,9 +54,15 @@ module.exports.postLogin = function(req,res){
             }
             bcrypt.compare(password, user.password)
                 .then(doMatch => {
-                    if (doMatch) {
-                        res.cookie('userId', user._id);
-                        //return res.redirect('/');                      
+                    console.log(doMatch);
+                    if (doMatch) {                       
+                        const token = encodedToken(user._id,user.email);
+                        res.setHeader('accessToken', token);
+                        return res.status(200).json({
+                            status: 200, data: {
+                                'accessToken': token
+                            }, message: "suscess"
+                        });                    
                     }
                     //return res.render('auth/login',{errors:'Mật khẩu không đúng', values:email});
                     return res.status(401).json({ status: 401, data: {}, message: "Invalid password." });
