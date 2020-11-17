@@ -10,7 +10,7 @@ var authRoute = require('./router/auth.route');
 var adminRoute = require('./router/admin.route');
 var paymentRoute = require('./router/payment.route');
 
-// var authMiddleware = require('./middlewares/auth.middlerware');
+var authMiddleware = require('./middlewares/admin.middlerware');
 var passport = require('passport');
 const passportConfig = require('./middlewares/passport.middleware');
 
@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',usersRoute);
 app.use('/auth',authRoute);
-app.use('/admin',adminRoute);
+app.use('/admin',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,adminRoute);
 app.use('/payment',passport.authenticate('jwt',{session : false}),paymentRoute);
 
 // app.get('/',userMiddleware.requireUser,function(req, res){

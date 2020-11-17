@@ -18,10 +18,9 @@ const encodedToken = (userId) => {
     }, JWT_SECRET)
 };
 
-
 // index of admin
 module.exports.index = function(req,res){
-    var perPage = 10;
+    var perPage = 20;
     var page = req.query.page || 1;
     Product
         .find({})
@@ -31,10 +30,11 @@ module.exports.index = function(req,res){
             Product.countDocuments({}).exec(function(err,count){
                 if (err) return next (err)
                 //console.log(count);
-                res.render('admin/dashboad', {
-                dsphim: data, 
-                current: page,
-                pages: Math.ceil(count/perPage)});
+                // res.render('admin/dashboad', {
+                // dsphim: data, 
+                // current: page,
+                // pages: Math.ceil(count/perPage)});
+                return res.status(200).send(data);
             })
         })
 }

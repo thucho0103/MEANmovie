@@ -52,8 +52,8 @@ module.exports.postLogin = function (req, res) {
                 })
         })
         .catch(err => {
-            res.status(500).json({ data: err });
-            return console.log(err);
+            console.log(err);            
+            return res.status(500).json({ data: err });
         });
 }
 module.exports.logout = function (req, res) {

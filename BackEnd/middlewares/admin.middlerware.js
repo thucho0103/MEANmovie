@@ -1,18 +1,28 @@
-var Admin = require('../models/admin.model'); 
+var User = require('../models/users.model'); 
 
 module.exports.requireAuth = function(req, res, next){
-    // console.log(req.cookies.adminId);
-    if(!req.cookies.adminId){
-        res.redirect('/admin/login');
-        return;
+    console.log(req.user);
+    if(!req.user.sub){
+        return res.status(403).json({message : "Forbidden"});
     }
-    Admin.find({_id:req.cookies.adminId},function(err,data){
-        if(!data.length){
-            res.redirect('/admin/login');
-            return;
-        }  
-        // res.locals.user= data[0];     
-        // console.log(data[0].userName);
-    });
-    next();
+    User.findOne({_id : req.user.sub})
+        .then(result =>{
+            if(!result){
+                console.log(result);
+                return res.status(403).json({message : "Forbidden"});
+            } 
+            else{
+                console.log(result.isAdmin);
+                if(result.isAdmin == true){
+                    next();
+                }
+                else{
+                    return res.status(403).json({message : "Forbidden"});
+                }
+                
+            }                   
+        })
+        .catch(err =>{
+            return res.status(500).json({ data: err });
+        });    
 };

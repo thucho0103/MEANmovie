@@ -15,6 +15,7 @@ var userSchema = new mongoose.Schema({
     resetToken: String,
     resetTokenExp: Date,
     favourites : [Object],
+    isAdmin: Boolean,
 })
 // var list = mongoose.model('list', listSchema);
 var Users = mongoose.model('Users',userSchema, 'users');
