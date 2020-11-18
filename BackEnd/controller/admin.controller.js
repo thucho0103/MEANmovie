@@ -1,10 +1,8 @@
 var Admin = require('../models/admin.model');
-var Product = require('../models/products.model');
 var Users = require('../models/users.model');
 var axios = require('axios');
 var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
-const Products = require('../models/products.model');
 const Movie = require('../models/movie.model');
 const JWT = require('jsonwebtoken');
 
@@ -22,18 +20,13 @@ const encodedToken = (userId) => {
 module.exports.index = function(req,res){
     var perPage = 20;
     var page = req.query.page || 1;
-    Product
+    Movie
         .find({})
         .skip((perPage * page) - perPage)
         .limit(perPage)
         .exec(function(err,data){
-            Product.countDocuments({}).exec(function(err,count){
+            Movie.countDocuments({}).exec(function(err,count){
                 if (err) return next (err)
-                //console.log(count);
-                // res.render('admin/dashboad', {
-                // dsphim: data, 
-                // current: page,
-                // pages: Math.ceil(count/perPage)});
                 return res.status(200).send(data);
             })
         })
@@ -114,7 +107,7 @@ module.exports.postCreateproduct = function(req,res){
         }); 
 }
 module.exports.editProduct = function(req, res){
-    Products.findOne({_id:req.params.item})
+    Movie.findOne({_id:req.params.item})
             .then(data =>{
                 console.log(data.phanloai);
                 res.render('admin/editMovie',{values:data});
@@ -148,8 +141,9 @@ module.exports.postEditproduct = function(req,res){
 }
 // delete product
 module.exports.deleteProduct = function(req,res){
-    Product.findOne({_id: req.body.id})
+    Movie.findOne({_id: req.body.id})
     .then(movie=>{
+        console.log(movie);
         if(!movie){
             return res.status(200).json({message : "Phim không tồn tại"});
         }
