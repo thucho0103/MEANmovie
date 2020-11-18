@@ -22,7 +22,7 @@ route.post('/crawl',controller.postCrawl);
 route.get('/editMovie/:item',controller.editProduct);
 route.post('/editMovie',controller.postEditproduct);
 
-route.delete('/deleteMovie',controller.deleteProduct);
+route.post('/deleteMovie',controller.deleteProduct);
 
 route.get('/manageuser',controller.manageuser);
 

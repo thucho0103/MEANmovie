@@ -148,14 +148,19 @@ module.exports.postEditproduct = function(req,res){
 }
 // delete product
 module.exports.deleteProduct = function(req,res){
-    Product.findOne({_id: req.body.id}).deleteOne(function(err,data){
-        if(err){
-            return res.status(500).json({message : err});
-        } 
-        else{
-            return res.status(200).json({message : "Xoá thành công"});
+    Product.findOne({_id: req.body.id})
+    .then(movie=>{
+        if(!movie){
+            return res.status(200).json({message : "Phim không tồn tại"});
         }
-    });
+        else{
+            movie.remove();
+            return res.status(200).json({message : "Xoá thành công"});
+        }       
+    })
+    .catch(err=>{
+        return res.status(500).json({message : err});
+    });      
 }
 // create user
 module.exports.createUser = function(req, res){
