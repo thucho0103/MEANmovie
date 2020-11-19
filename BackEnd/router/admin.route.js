@@ -16,9 +16,6 @@ route.get('/logout',controller.logout);
 route.get('/createMovie',controller.createProduct);
 route.post('/createMovie',controller.postCreateproduct);
 
-route.get('/crawl',controller.crawl);
-route.post('/crawl',controller.postCrawl);
-
 route.get('/editMovie/:item',controller.editProduct);
 route.post('/editMovie',controller.postEditproduct);
 

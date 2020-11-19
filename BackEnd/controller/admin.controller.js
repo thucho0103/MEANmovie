@@ -91,7 +91,7 @@ module.exports.postCreateproduct = function(req,res){
                 source: req.body.source.split(","),
                 poster: req.body.poster,
                 imageSource: req.body.imageSource,
-                dateUpdate : req.body.dateUpdate,
+                dateUpload : req.body.dateUpload,
             }
             var newMovie = Movie(movie)
             .save(function(err,data){
@@ -123,8 +123,8 @@ module.exports. postEditproduct = function(req,res){
             movie.description = req.body.description;
             movie.source = req.body.source.split(",");
             movie.poster = req.body.poster;
-            movie.imageSource = req.body.image_source;
-            movie.imageSource = req.body.date_update;
+            movie.imageSource = req.body.imageSource;
+            movie.dateUpload = req.body.dateUpload;
             
             movie.save();           
         })
