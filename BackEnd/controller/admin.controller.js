@@ -15,8 +15,6 @@ const encodedToken = (userId) => {
         exp: new Date().setDate(new Date().getDate() + 1),
     }, JWT_SECRET)
 };
-
-// index of admin
 module.exports.index = function(req,res){
     var perPage = 20;
     var page = req.query.page || 1;
@@ -31,7 +29,6 @@ module.exports.index = function(req,res){
             })
         })
 }
-// login
 module.exports.login = function(req, res){
     res.render('admin/login');
 }
@@ -116,7 +113,7 @@ module.exports.editProduct = function(req, res){
                 console.log(err);
             })
 }
-module.exports.postEditproduct = function(req,res){
+module.exports. postEditproduct = function(req,res){
     Movie.findOne({_id: req.body.id})
         .then(movie=>{
             movie.title = req.body.title;

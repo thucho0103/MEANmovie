@@ -16,7 +16,7 @@ var movieSchema = new mongoose.Schema({
     source: [String],
     poster: String,
     imageSource: String,
-    dateUpdate : String,
+    dateUpload : String,
 })
 // var list = mongoose.model('list', listSchema);
 //movieSchema.set('timestamps', true);

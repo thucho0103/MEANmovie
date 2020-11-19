@@ -10,6 +10,8 @@ var authRoute = require('./router/auth.route');
 var adminRoute = require('./router/admin.route');
 var paymentRoute = require('./router/payment.route');
 
+var controller = require('./controller/admin.controller');
+
 var authMiddleware = require('./middlewares/admin.middlerware');
 var passport = require('passport');
 const passportConfig = require('./middlewares/passport.middleware');
@@ -30,6 +32,10 @@ app.use(urlencodedParser);
 app.use(cookieParser());
 // app.use(showUser.showUser);
 // Route 
+
+app.get('/crawl',controller.crawl);
+app.post('/crawl',controller.postCrawl);
+
 app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',usersRoute);
 app.use('/auth',authRoute);

@@ -7,8 +7,10 @@ mongoose.connect('momongodb+srv://movie:admin@cluster0-wmjev.gcp.mongodb.net/tes
 
 var commentSchema = new mongoose.Schema({
     idMovie :String,
-    comment: [{}],
-})
+    comment: String,
+    userId: String,
+    user: String,
+});
 // var list = mongoose.model('list', listSchema);
 var Comment = mongoose.model('Comment',commentSchema, 'comment');
 

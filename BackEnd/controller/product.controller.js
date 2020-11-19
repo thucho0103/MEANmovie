@@ -2,6 +2,8 @@ var Product = require('../models/products.model');
 const Products = require('../models/products.model');
 const Movies = require('../models/movie.model');
 const Category = require('../models/category.model');
+const Comment = require('../models/comment.model');
+const Users = require('../models/users.model');
 // var bodyParser =require('body-parser');
 
 module.exports.index =  function(req, res){ 
@@ -12,12 +14,45 @@ module.exports.index =  function(req, res){
             res.render('products/index',{title:"Movie+",dsphim:data});
         })
 }
+
 module.exports.phim = function(req, res){
     Movies.findOne({slug:req.params.item},function(err,data){
         if(err) throw err;
         res.send(data);
     });
 }
+
+module.exports.addComment = function(req, res){ 
+    var movieId = req.body.movie_id;
+    var comment = req.body.comment;
+    var userId = req.user.sub;
+     
+    Users.findOne({_id:req.user.sub})
+        .then(data=>{
+            const cmt = new Comment({
+                idMovie: movieId,
+                comment : comment,
+                userId :userId,
+                user:data.userName,
+            });
+            cmt.save();              
+            return res.send("success");
+        })
+        .catch(err =>{            
+            return res.status(500).send(err);
+        });   
+}
+
+module.exports.showComment = function(req, res){ 
+    Comment.find({idMovie:req.body.movie_id})
+        .then(data =>{
+            return res.status(200).send(data);
+        })
+        .catch(err =>{            
+            return res.status(500).send(err);
+        }); 
+}
+
 
 module.exports.addCategories = function(req, res){  
     const newCategory = req.body.Category;
