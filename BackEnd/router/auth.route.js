@@ -5,6 +5,8 @@ var validate = require('../validate/user.validate');
 var controller = require('../controller/auth.controller');
 var authMiddleware = require('../middlewares/auth.middlerware');
 
+var passport = require('passport');
+const passportConfig = require('../middlewares/passport.middleware');
 // route.get('/',authMiddleware.requireAuth,controller.index);
 
 route.get('/',controller.auth);
@@ -16,6 +18,8 @@ route.get('/register',controller.register);
 route.post('/register',
     controller.postRegister
 );
+route.post('/changepassword',passport.authenticate('jwt',{session : false}),controller.postChangePassword);
+
 route.post('/checkemail',controller.CheckEmail);
 route.get('/reset',controller.Reset);
 route.post('/reset',controller.postReset);

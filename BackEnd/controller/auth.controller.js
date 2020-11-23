@@ -125,10 +125,14 @@ module.exports.postRegister = function (req, res) {
 module.exports.Reset = function (req, res) {
     res.render('auth/reset', { errors: '0', values: '' });
 }
+
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+//sgMail.setApiKey('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');
+
+
 module.exports.postReset = function (req, res) {
     const email = req.body.email;
+    sgMail.setApiKey('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');
     crypto.randomBytes(32, (err, Buffer) => {
         if (err) {
             console.log(err);
@@ -148,18 +152,24 @@ module.exports.postReset = function (req, res) {
             })
             .then(result => {
                 if (result) {
-                    //res.render('auth/reset',{errors:'Gửi thành công!',values:email});
-                    res.status(200).json({ data: "Gửi thành công!" });
+                    //res.render('auth/reset',{errors:'Gửi thành công!',values:email});                   
                     const msg = {
                         to: email,
-                        from: 'teadragon@movie.com',
+                        from: 'test@example.com',
                         subject: 'Sending with Movie+',
                         html: `
                         <p> Yêu cầu lấy lại mật khẩu </p>
                         <p> Click vào <a href="https://teamovie.herokuapp.com/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
                     `
                     };
-                    sgMail.send(msg);
+                    sgMail.send(msg)
+                    .then(()=>{
+                        res.status(200).json({ data: "Gửi thành công!","token":token });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        res.status(500).json({ data: "Gửi lỗi"});
+                    });
                 }
             })
             .catch(err => {
@@ -231,6 +241,27 @@ module.exports.postNewPassword = function (req, res) {
         })
         .catch(err => {
             console.log(err);
+            res.status(500).json({ data: err });
+        })
+}
+
+module.exports.postChangePassword = function (req, res) {
+    const newPassword = req.body.password;
+    let resetUser;
+    Users.findOne({ _id: req.user.sub })
+        .then(user => {
+            console.log(user);
+            resetUser = user;
+            return bcrypt.hash(newPassword, 12);
+        })
+        .then(hashPassword => {
+            resetUser.password = hashPassword;
+            return resetUser.save();
+        })
+        .then(result => {
+            res.status(200).json({ data: "change password susscess"});
+        })
+        .catch(err => {
             res.status(500).json({ data: err });
         })
 }

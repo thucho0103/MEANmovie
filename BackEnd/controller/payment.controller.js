@@ -4,10 +4,6 @@ var router = express.Router();
 var $ = require('jquery');
 
 module.exports.createPayment = function(req,res){
-    
-
-    //console.log(req.user.sub); 
-
     var userName;
     Users.findOne({ _id: req.user.sub })
         .then(user=>{
