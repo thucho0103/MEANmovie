@@ -1,11 +1,20 @@
 var Users = require('../models/users.model');
 var Products =require('../models/products.model');
+
 module.exports.index = function(req, res){
-    Users.findOne({_id:req.cookies.userId},function(err,data){
-        if(err) throw err;
-        res.render('users/view', { userinfor : data });
-        // console.log(data);
-    });
+    Users.findOne({_id:req.user.sub})
+        .then(result =>{
+            var user = {
+                email:result.email,
+                userName:result.userName,
+                address:result.address,
+                phoneNumber:result.phoneNumber
+            }
+            return res.status(200).send(user);
+        })
+        .catch(err=>{
+            return res.status(500).send(err);
+        });
 }
 module.exports.postUpdateInfo = function(req,res){
     const userName = req.body.userName;
