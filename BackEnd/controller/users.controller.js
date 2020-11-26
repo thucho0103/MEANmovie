@@ -6,8 +6,9 @@ module.exports.index = function(req, res){
         .then(result =>{
             var user = {
                 email:result.email,
-                userName:result.userName,
+                nickName:result.userName,
                 address:result.address,
+                plan:result.plan,
                 phoneNumber:result.phoneNumber
             }
             return res.status(200).send(user);
