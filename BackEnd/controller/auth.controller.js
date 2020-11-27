@@ -2,6 +2,7 @@ const Users = require('../models/users.model');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
@@ -130,6 +131,25 @@ const sgMail = require('@sendgrid/mail');
 //sgMail.setApiKey('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');
 
 
+// const transporter = nodemailer.createTransport({
+//     host: "smtp.mailtrap.io",
+//     port: 2525,
+//     auth: {
+//         user: 'ae0f116b4dcb88',
+//         pass: '5b39ef8f40b85a'
+//     }
+// });
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'teamoviemail@gmail.com',
+        pass: ''
+    }
+});
+
 module.exports.postReset = function (req, res) {
     const email = req.body.email;
     sgMail.setApiKey('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');
@@ -151,18 +171,28 @@ module.exports.postReset = function (req, res) {
                 return res.status(200).json({ data: "Email không tồn tại trong hệ thống" });
             })
             .then(result => {
-                if (result) {
-                    //res.render('auth/reset',{errors:'Gửi thành công!',values:email});                   
-                    const msg = {
+                if (result) {                                      
+                    // send email
+                    transporter.sendMail({
+                        from: 'teamoviemail@gmail.com',
                         to: email,
-                        from: 'test@example.com',
                         subject: 'Sending with Movie+',
                         html: `
                         <p> Yêu cầu lấy lại mật khẩu </p>
-                        <p> Click vào <a href="https://teamovie.herokuapp.com/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
+                        <p> Click vào <a href="http://localhost:3000/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
                     `
-                    };
-                    sgMail.send(msg)
+                    })
+                    //res.render('auth/reset',{errors:'Gửi thành công!',values:email});                   
+                    // const msg = {
+                    //     to: email,
+                    //     from: 'test@example.com',
+                    //     subject: 'Sending with Movie+',
+                    //     html: `
+                    //     <p> Yêu cầu lấy lại mật khẩu </p>
+                    //     <p> Click vào <a href="https://teamovie.herokuapp.com/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
+                    // `
+                    // };
+                    // sgMail.send(msg)
                     .then(()=>{
                         res.status(200).json({ data: "Gửi thành công!","token":token });
                     })
