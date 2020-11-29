@@ -69,8 +69,8 @@ module.exports.getCategories = function(req, res){
             var result =[];
             data.forEach(element => {
                 var cate = {
-                    name:element.category,
-                    title:element.categorySlug,
+                    title:element.category,
+                    name:element.categorySlug,
                 };
                 result.push(cate);
             });       
