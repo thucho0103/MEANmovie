@@ -7,7 +7,7 @@ mongoose.connect('mongodb+srv://movie:admin@movie-aoto6.gcp.mongodb.net/test?ret
 mongoose.plugin(slug);   
 var categorySchema = new mongoose.Schema({
     category:String,   
-    slug :{type: String, slug : "category"},
+    categorySlug :{type: String, slug : "category"}   
 })
 // var list = mongoose.model('list', listSchema);
 var Category = mongoose.model('Category',categorySchema, 'listCategory');

@@ -56,21 +56,29 @@ module.exports.showComment = function(req, res){
 module.exports.addCategories = function(req, res){  
     const newCategory = req.body.Category;
     const cate = new Category({
-        category:Category
+        category:newCategory
     });
     cate.save();    
     res.send("success");
 }
 
-module.exports.getCategories = function(req, res){   
-    Category.find({}).exec(function(err,data){              
-        if(err) throw err;
-        const ListCategories = [];
-        data.forEach(element => {
-            ListCategories.push(element.category);
+module.exports.getCategories = function(req, res){  
+
+    Category.find({})
+        .then(data=>{    
+            var result =[];
+            data.forEach(element => {
+                var cate = {
+                    name:element.category,
+                    title:element.categorySlug,
+                };
+                result.push(cate);
+            });       
+            res.status(200).send(result);
+        })  
+        .catch(err=>{
+            res.status(500).send(err);   
         });
-        res.send(ListCategories);
-    });
 }
 
 module.exports.phimbo = function(req, res){
