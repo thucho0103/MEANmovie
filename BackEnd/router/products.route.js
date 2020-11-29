@@ -12,9 +12,7 @@ route.get('/',userMiddleware.requireUser,controller.index);
 route.get('/watch/:item',controller.phim);
 route.get('/phimbo',controller.phimbo);
 route.get('/phimle',controller.phimle);
-route.get('/categories/getcategories',controller.getCategories);
 
-route.post('/categories/add',controller.addCategories);
 route.get('/categories/:type',controller.type);
 
 route.post('/rating/create',controller.addComment);

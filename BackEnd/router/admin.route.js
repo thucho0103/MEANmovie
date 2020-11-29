@@ -13,21 +13,24 @@ route.post('/login',controller.postLogin);
 route.get('/logout',controller.logout);
 
 // create & delete products
-route.get('/createMovie',controller.createProduct);
-route.post('/createMovie',controller.postCreateproduct);
+route.get('/createMovie',authMiddleware.requireAuth,controller.createProduct);
+route.post('/createMovie',authMiddleware.requireAuth,controller.postCreateproduct);
 
-route.get('/editMovie/:item',controller.editProduct);
-route.post('/editMovie',controller.postEditproduct);
+route.get('/editMovie/:item',authMiddleware.requireAuth,controller.editProduct);
+route.post('/editMovie',authMiddleware.requireAuth,controller.postEditproduct);
 
-route.post('/deleteMovie',controller.deleteProduct);
+route.get('/categories/getcategories',authMiddleware.requireAuth,controller.getCategories);
+route.post('/categories/add',authMiddleware.requireAuth,controller.addCategories);
 
-route.get('/manageuser',controller.manageuser);
+route.post('/deleteMovie',authMiddleware.requireAuth,controller.deleteProduct);
 
-route.get('/createuser',controller.createUser);
-route.post('/createuser',controller.postCreateUser);
+route.get('/manageuser',authMiddleware.requireAuth,controller.manageuser);
 
-route.get('/edituser/:item',controller.editUser);
-route.post('/edituser',controller.postEditUser);
+route.get('/createuser',authMiddleware.requireAuth,controller.createUser);
+route.post('/createuser',authMiddleware.requireAuth,controller.postCreateUser);
 
-route.delete('/deleteUser',controller.deleteuser);
+route.get('/edituser/:item',authMiddleware.requireAuth,controller.editUser);
+route.post('/edituser',authMiddleware.requireAuth,controller.postEditUser);
+
+route.delete('/deleteUser',authMiddleware.requireAuth,controller.deleteuser);
 module.exports = route;

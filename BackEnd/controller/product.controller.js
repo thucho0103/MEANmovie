@@ -1,7 +1,6 @@
 var Product = require('../models/products.model');
 const Products = require('../models/products.model');
 const Movies = require('../models/movie.model');
-const Category = require('../models/category.model');
 const Comment = require('../models/comment.model');
 const Users = require('../models/users.model');
 // var bodyParser =require('body-parser');
@@ -53,33 +52,6 @@ module.exports.showComment = function(req, res){
         }); 
 }
 
-module.exports.addCategories = function(req, res){  
-    const newCategory = req.body.Category;
-    const cate = new Category({
-        category:newCategory
-    });
-    cate.save();    
-    res.send("success");
-}
-
-module.exports.getCategories = function(req, res){  
-
-    Category.find({})
-        .then(data=>{    
-            var result =[];
-            data.forEach(element => {
-                var cate = {
-                    title:element.category,
-                    name:element.categorySlug,
-                };
-                result.push(cate);
-            });       
-            res.status(200).send(result);
-        })  
-        .catch(err=>{
-            res.status(500).send(err);   
-        });
-}
 
 module.exports.phimbo = function(req, res){
     var perPage = 8;

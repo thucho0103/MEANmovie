@@ -4,6 +4,7 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
 const Movie = require('../models/movie.model');
+const Category = require('../models/category.model');
 const JWT = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
@@ -36,7 +37,7 @@ module.exports.postLogin = function(req,res){
     var userName = req.body.username;
     var password = req.body.password;
     //console.log(userName+" "+ password);
-    Admin.findOne({ userName: userName })
+    Users.findOne({ email: userName })
         .then(user => {
             if (!user) {
                 //return res.render('auth/login',{errors:'Email không tồn tại', values:email});
@@ -218,6 +219,36 @@ module.exports.postEditUser = function(req,res){
         }
     )
 }
+
+
+module.exports.addCategories = function(req, res){  
+    const newCategory = req.body.Category;
+    const cate = new Category({
+        category:newCategory
+    });
+    cate.save();    
+    res.send("success");
+}
+
+module.exports.getCategories = function(req, res){  
+
+    Category.find({})
+        .then(data=>{    
+            var result =[];
+            data.forEach(element => {
+                var cate = {
+                    title:element.category,
+                    name:element.categorySlug,
+                };
+                result.push(cate);
+            });       
+            res.status(200).send(result);
+        })  
+        .catch(err=>{
+            res.status(500).send(err);   
+        });
+}
+
 // delete user 
 module.exports.deleteuser = function(req, res){
     // console.log(req.body.id);
