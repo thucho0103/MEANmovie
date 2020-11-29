@@ -4,80 +4,98 @@ var router = express.Router();
 var $ = require('jquery');
 
 module.exports.createPayment = function(req,res){
-    var userName;
+    var plan = req.query.plan;
+    var amoutSelect;
+    let userPayment;
     Users.findOne({ _id: req.user.sub })
         .then(user=>{
+            userPayment = user;
             console.log(user.email);
-            userName = user.email;
-            //return userName;
+            return user.email;
+        })
+        .then((userName)=>{
+            console.log(userName);
+            switch (plan) {
+                case 1: 
+                    amoutSelect ='40000';   
+                    break;
+                case 2: 
+                    amoutSelect ='60000';   
+                    break;
+                default: amoutSelect ='20000';  
+                    break;
+            }    
+            var ipAddr = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+        
+            console.log(ipAddr);
+            var config = require('config');
+            var dateFormat = require('dateformat');
+           
+            var tmnCode = config.get('vnp_TmnCode');
+            var secretKey = config.get('vnp_HashSecret');
+            var vnpUrl = config.get('vnp_Url');
+            var returnUrl = config.get('vnp_ReturnUrl');
+        
+            var date = new Date();
+        
+            var createDate = dateFormat(date, 'yyyymmddHHmmss');
+            var orderId = dateFormat(date, 'HHmmss');
+            var amount = amoutSelect;
+            var bankCode = '';
+               
+            var orderInfo = `${userName} Thanh toan goi premium`;
+            var orderType = 'billpayment';
+            var locale = 'vn';
+            if(locale === null || locale === ''){
+                locale = 'vn';
+            }
+        
+            var currCode = 'VND';
+            var vnp_Params = {};
+            vnp_Params['vnp_Version'] = '2';
+            vnp_Params['vnp_Command'] = 'pay';
+            vnp_Params['vnp_TmnCode'] = tmnCode;
+            // vnp_Params['vnp_Merchant'] = ''
+            vnp_Params['vnp_Locale'] = locale;
+            vnp_Params['vnp_CurrCode'] = currCode;
+            vnp_Params['vnp_TxnRef'] = orderId;
+            vnp_Params['vnp_OrderInfo'] = orderInfo;
+            vnp_Params['vnp_OrderType'] = orderType;
+            vnp_Params['vnp_Amount'] = amount * 100;
+            vnp_Params['vnp_ReturnUrl'] = returnUrl;
+            vnp_Params['vnp_IpAddr'] = ipAddr;
+            vnp_Params['vnp_CreateDate'] = createDate;
+            if(bankCode !== null && bankCode !== ''){
+                vnp_Params['vnp_BankCode'] = bankCode;
+            }
+        
+            vnp_Params = sortObject(vnp_Params);
+        
+            var querystring = require('qs');
+            var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+        
+            var sha256 = require('sha256');
+        
+            var secureHash = sha256(signData);
+        
+            vnp_Params['vnp_SecureHashType'] =  'SHA256';
+            vnp_Params['vnp_SecureHash'] = secureHash;
+            vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
+        
+            userPayment.plan = new Date().setDate(new Date().getDate() + 30);
+            userPayment.save();
+
+            //Neu muon dung Redirect thi dong dong ben duoi
+            res.status(200).json({code: '00', data: vnpUrl});
+            //Neu muon dung Redirect thi mo dong ben duoi va dong dong ben tren
+            //res.redirect(vnpUrl)
         })
         .catch(err=>{
-            userName = "No Name";
-        })  
-    // var ipAddr = req.headers['x-forwarded-for'] ||
-    //     req.connection.remoteAddress ||
-    //     req.socket.remoteAddress ||
-    //     req.connection.socket.remoteAddress;
-
-    // console.log(ipAddr);
-    // var config = require('config');
-    // var dateFormat = require('dateformat');
-   
-    // var tmnCode = config.get('vnp_TmnCode');
-    // var secretKey = config.get('vnp_HashSecret');
-    // var vnpUrl = config.get('vnp_Url');
-    // var returnUrl = config.get('vnp_ReturnUrl');
-
-    // var date = new Date();
-
-    // var createDate = dateFormat(date, 'yyyymmddHHmmss');
-    // var orderId = dateFormat(date, 'HHmmss');
-    // var amount = '20000';
-    // var bankCode = '';
-       
-    // var orderInfo = `${userName} Thanh toan goi premium`;
-    // var orderType = 'billpayment';
-    // var locale = 'vn';
-    // if(locale === null || locale === ''){
-    //     locale = 'vn';
-    // }
-
-    // var currCode = 'VND';
-    // var vnp_Params = {};
-    // vnp_Params['vnp_Version'] = '2';
-    // vnp_Params['vnp_Command'] = 'pay';
-    // vnp_Params['vnp_TmnCode'] = tmnCode;
-    // // vnp_Params['vnp_Merchant'] = ''
-    // vnp_Params['vnp_Locale'] = locale;
-    // vnp_Params['vnp_CurrCode'] = currCode;
-    // vnp_Params['vnp_TxnRef'] = orderId;
-    // vnp_Params['vnp_OrderInfo'] = orderInfo;
-    // vnp_Params['vnp_OrderType'] = orderType;
-    // vnp_Params['vnp_Amount'] = amount * 100;
-    // vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    // vnp_Params['vnp_IpAddr'] = ipAddr;
-    // vnp_Params['vnp_CreateDate'] = createDate;
-    // if(bankCode !== null && bankCode !== ''){
-    //     vnp_Params['vnp_BankCode'] = bankCode;
-    // }
-
-    // vnp_Params = sortObject(vnp_Params);
-
-    // var querystring = require('qs');
-    // var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-
-    // var sha256 = require('sha256');
-
-    // var secureHash = sha256(signData);
-
-    // vnp_Params['vnp_SecureHashType'] =  'SHA256';
-    // vnp_Params['vnp_SecureHash'] = secureHash;
-    // vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
-
-    // //Neu muon dung Redirect thi dong dong ben duoi
-    // res.status(200).json({code: '00', data: vnpUrl})
-    // //Neu muon dung Redirect thi mo dong ben duoi va dong dong ben tren
-    // //res.redirect(vnpUrl)
+            res.status(500).json({Message: err});
+        })    
 }
 
 module.exports.vnpayReturn = function (req, res, next) {

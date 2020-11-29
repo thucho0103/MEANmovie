@@ -13,10 +13,16 @@ route.get('/watch/:item',controller.phim);
 route.get('/phimbo',controller.phimbo);
 route.get('/phimle',controller.phimle);
 route.get('/categories/getcategories',controller.getCategories);
+
 route.post('/categories/add',controller.addCategories);
 route.get('/categories/:type',controller.type);
+
+route.post('/rating/create',controller.addComment);
+route.post('/rating/get',controller.showComment);
+
 route.post('/comment/create',controller.addComment);
 route.post('/comment/get',controller.showComment);
+
 route.get('/search',controller.search);
 //route.get('/changemovie',controller.ChangeData);
 

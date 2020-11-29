@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+var sendpulse = require('sendpulse-api');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
 
@@ -86,7 +87,6 @@ module.exports.CheckEmail = function (req, res) {
 }
 
 module.exports.postRegister = function (req, res) {
-    console.log(req.body);
     var email = req.body.email;
     const password = req.body.password;
     const confirmPW = req.body.confirm_password;
@@ -107,9 +107,10 @@ module.exports.postRegister = function (req, res) {
         .then(hashPassword => {
             const user = new Users({
                 email: req.body.email,
-                userName: req.body.userName,
+                nickName: req.body.nickName,
                 password: hashPassword,
                 dateCreate: new Date().toDateString(),
+                plan : new Date().setDate(new Date().getDate() + 3)
             });
             return user.save();
         })
@@ -131,24 +132,32 @@ const sgMail = require('@sendgrid/mail');
 //sgMail.setApiKey('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');
 
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+        user: 'ae0f116b4dcb88',
+        pass: '5b39ef8f40b85a'
+    }
+});
+
 // const transporter = nodemailer.createTransport({
-//     host: "smtp.mailtrap.io",
-//     port: 2525,
+//     host: 'smtp-pulse.com',
+//     port: 465,
 //     auth: {
-//         user: 'ae0f116b4dcb88',
-//         pass: '5b39ef8f40b85a'
+//         user: 'thucduy0103@gmail.com',
+//         pass: 'ebnRmoYrboZZ'
 //     }
 // });
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: 'teamoviemail@gmail.com',
-        pass: ''
-    }
-});
+
+var API_USER_ID = "a53fcd17b989efb1304363afc892e96c";
+var API_SECRET = "34255bdf8f706682db05c8cd99c833fc";
+var TOKEN_STORAGE = "/tmp/";
+ 
+// sendpulse.init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function() {
+//     sendpulse.listAddressBooks(console.log);
+// });
 
 module.exports.postReset = function (req, res) {
     const email = req.body.email;
@@ -174,7 +183,7 @@ module.exports.postReset = function (req, res) {
                 if (result) {                                      
                     // send email
                     transporter.sendMail({
-                        from: 'teamoviemail@gmail.com',
+                        from: 'teamovie@movie.com',
                         to: email,
                         subject: 'Sending with Movie+',
                         html: `

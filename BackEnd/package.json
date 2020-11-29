@@ -29,6 +29,7 @@
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "sendpulse-api": "^1.1.4",
     "sha256": "^0.2.0"
   }
 }

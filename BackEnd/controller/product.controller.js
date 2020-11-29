@@ -53,7 +53,6 @@ module.exports.showComment = function(req, res){
         }); 
 }
 
-
 module.exports.addCategories = function(req, res){  
     const newCategory = req.body.Category;
     const cate = new Category({

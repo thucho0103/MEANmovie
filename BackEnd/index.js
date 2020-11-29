@@ -40,7 +40,7 @@ app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',passport.authenticate('jwt',{session : false}),usersRoute);
 app.use('/auth',authRoute);
 app.use('/admin',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,adminRoute);
-app.use('/payment',passport.authenticate('jwt',{session : false}),paymentRoute);
+app.use('/payment',paymentRoute);
 
 // app.get('/',userMiddleware.requireUser,function(req, res){
 //     res.render('products/index');

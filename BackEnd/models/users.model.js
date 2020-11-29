@@ -6,12 +6,10 @@ var mongoose = require('mongoose');
 mongoose.connect('momongodb+srv://movie:admin@cluster0-wmjev.gcp.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 var userSchema = new mongoose.Schema({
-    NickName : String,
+    nickName : String,
     userName :String,
     password: String,
     email : String,
-    phoneNumber : String,
-    address : String,
     dateCreate : String,
     resetToken: String,
     resetTokenExp: Date,
