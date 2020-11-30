@@ -7,7 +7,6 @@ mongoose.connect('momongodb+srv://movie:admin@cluster0-wmjev.gcp.mongodb.net/tes
 
 var userSchema = new mongoose.Schema({
     nickName : String,
-    userName :String,
     password: String,
     email : String,
     dateCreate : String,

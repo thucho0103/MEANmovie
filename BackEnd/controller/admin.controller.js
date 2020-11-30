@@ -188,12 +188,39 @@ module.exports.manageuser = function(req, res){
         .limit(perPage)
         .exec(function(err,data){
             Users.countDocuments({}).exec(function(err,count){
-                if (err) return next (err)
+                if (err) return res.status(500).send(err);
                 //console.log(count);
-                res.render('admin/manageUser', {
-                users: data , 
-                current: page,
-                pages: Math.ceil(count/perPage)});
+
+                // res.render('admin/manageUser', {
+                // users: data , 
+                // current: page,
+                // pages: Math.ceil(count/perPage)});
+                var listUser = [];               
+                data.forEach(element => {
+                    if(!element.isAdmin){
+                        var today = element.plan;
+                        var dd = today.getDate();
+                        var mm = today.getMonth()+1; 
+                        var yyyy = today.getFullYear();
+                        if(dd<10) 
+                        {
+                            dd='0'+dd;
+                        } 
+                        if(mm<10) 
+                        {
+                            mm='0'+mm;
+                        }
+                        var user_infor ={
+                            email:element.email,
+                            nickName:element.nickName,
+                            dateCreate:element.dateCreate,
+                            plan:dd+'/'+mm+'/'+yyyy,              
+                        };
+                        
+                        listUser.push(user_infor);
+                    }                   
+                });
+                res.status(200).json({data:listUser,current :page,pages:Math.ceil(count/perPage)});
             })
         })
 }
@@ -206,20 +233,20 @@ module.exports.editUser= function(req, res){
     });
 }
 module.exports.postEditUser = function(req,res){
-    Users.findOneAndUpdate({email : req.body.email},
-        {
-        userName : req.body.userName,
-        email: req.body.email,
-        phoneNumber:req.body.phoneNumber,
-        password: req.password,
-        },
-        function(err,data){
-            if(err) throw err;
-            res.redirect("/admin/manageuser");
-        }
-    )
+    Users.findOne({_id: req.body.id})
+        .then(user=>{
+            user.nickName = req.body.nickName;
+            user.dateCreate = req.body.dateCreate;
+            user.plan = req.body.plan;             
+            user.save();           
+        })
+        .then(result =>{
+            return res.status(200).json({message : "Cập nhật thành công"});
+        })
+        .catch(err=>{
+            return res.status(500).json({message : "Cập nhật thất bại"})
+        })        
 }
-
 
 module.exports.addCategories = function(req, res){  
     const newCategory = req.body.Category;
@@ -251,11 +278,20 @@ module.exports.getCategories = function(req, res){
 
 // delete user 
 module.exports.deleteuser = function(req, res){
-    // console.log(req.body.id);
-    Users.findOne({_id: req.body.id}).deleteOne(function(err,data){
-        if(err) throw err;
-        res.redirect('/admin/manageuser');
-    });
+    Users.findOne({_id: req.body.id})
+    .then(user=>{
+        console.log(user);
+        if(!user){
+            return res.status(200).json({message : "Phim không tồn tại"});
+        }
+        else{
+            user.remove();
+            return res.status(200).json({message : "Xoá thành công"});
+        }       
+    })
+    .catch(err=>{
+        return res.status(500).json({message : err});
+    }); 
 }
 module.exports.crawl = function(req,res){
     res.render('admin/phimmoi');

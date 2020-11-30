@@ -107,7 +107,7 @@ module.exports.postRegister = function (req, res) {
         .then(hashPassword => {
             const user = new Users({
                 email: req.body.email,
-                nickName: req.body.nickName,
+                nickName: req.body.nickname,
                 password: hashPassword,
                 dateCreate: new Date().toDateString(),
                 plan : new Date().setDate(new Date().getDate() + 3)

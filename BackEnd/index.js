@@ -39,7 +39,7 @@ app.post('/crawl',controller.postCrawl);
 app.use('/movie',passport.authenticate('jwt',{session : false}),productRoute);
 app.use('/users',passport.authenticate('jwt',{session : false}),usersRoute);
 app.use('/auth',authRoute);
-app.use('/admin',passport.authenticate('jwt',{session : false}),adminRoute);
+app.use('/admin',adminRoute);
 app.use('/payment',paymentRoute);
 
 // app.get('/',userMiddleware.requireUser,function(req, res){
