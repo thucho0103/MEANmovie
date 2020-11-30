@@ -258,7 +258,6 @@ module.exports.addCategories = function(req, res){
 }
 
 module.exports.getCategories = function(req, res){  
-
     Category.find({})
         .then(data=>{    
             var result =[];

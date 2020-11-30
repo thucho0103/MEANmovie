@@ -115,11 +115,13 @@ module.exports.vnpayReturn = function (req, res, next) {
             var sha256 = require('sha256');
             var checkSum = sha256(signData);
             if(secureHash === checkSum){
+                console.log("thanh cong");
                 //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
                 res.send({code: vnp_Params['vnp_ResponseCode']});
                 //res.render('success', {code: vnp_Params['vnp_ResponseCode']})
             } else{
                 //res.render('success', {code: '97'})
+                console.log("that bai");
                 res.send({code: '97'});
             }
         })

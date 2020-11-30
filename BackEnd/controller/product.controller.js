@@ -129,9 +129,10 @@ module.exports.phimle = function(req,res){
 //         })
 // }
 module.exports.getCategories = function(req, res){  
-
+    console.log("data");
     Category.find({})
-        .then(data=>{    
+        .then(data=>{  
+            console.log(data);  
             var result =[];
             data.forEach(element => {
                 var cate = {
