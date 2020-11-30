@@ -34,10 +34,10 @@ module.exports.login = function(req, res){
     res.render('admin/login');
 }
 module.exports.postLogin = function(req,res){
-    var userName = req.body.username;
+    var email = req.body.email;
     var password = req.body.password;
-    //console.log(userName+" "+ password);
-    Users.findOne({ email: userName })
+    console.log(email+" "+ password);
+    Users.findOne({ email: email })
         .then(user => {
             if (!user) {
                 //return res.render('auth/login',{errors:'Email không tồn tại', values:email});

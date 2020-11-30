@@ -3,6 +3,7 @@ const Products = require('../models/products.model');
 const Movies = require('../models/movie.model');
 const Comment = require('../models/comment.model');
 const Users = require('../models/users.model');
+const Category = require('../models/category.model');
 // var bodyParser =require('body-parser');
 
 module.exports.index =  function(req, res){ 

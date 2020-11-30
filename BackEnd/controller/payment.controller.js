@@ -6,7 +6,6 @@ var $ = require('jquery');
 module.exports.createPayment = function(req,res){
     var plan = req.query.plan;
     var amoutSelect;
-    let userPayment;
     Users.findOne({ _id: req.user.sub })
         .then(user=>{
             userPayment = user;
@@ -46,7 +45,7 @@ module.exports.createPayment = function(req,res){
             var amount = amoutSelect;
             var bankCode = '';
                
-            var orderInfo = `${userName} Thanh toan goi premium`;
+            var orderInfo = `${userName} thanh toan goi xem phim`;
             var orderType = 'billpayment';
             var locale = 'vn';
             if(locale === null || locale === ''){
@@ -100,41 +99,38 @@ module.exports.createPayment = function(req,res){
 
 module.exports.vnpayReturn = function (req, res, next) {
 
-    console.log("1");
-    var vnp_Params = req.query;
-
-    var secureHash = vnp_Params['vnp_SecureHash'];
-
-    delete vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHashType'];
-
-    vnp_Params = sortObject(vnp_Params);
-
-    var config = require('config');
-    var tmnCode = config.get('vnp_TmnCode');
-    var secretKey = config.get('vnp_HashSecret');
-
-    var querystring = require('qs');
-    var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-
-    var sha256 = require('sha256');
-
-    var checkSum = sha256(signData);
-
-    if(secureHash === checkSum){
-        //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-        res.send({code: vnp_Params['vnp_ResponseCode']});
-        //res.render('success', {code: vnp_Params['vnp_ResponseCode']})
-    } else{
-        //res.render('success', {code: '97'})
-        res.send({code: '97'});
-    }
+    Users.find({email:req.user})
+        .then(user=>{
+            console.log("vnpay_return");
+            var vnp_Params = req.query;
+            var secureHash = vnp_Params['vnp_SecureHash'];
+            delete vnp_Params['vnp_SecureHash'];
+            delete vnp_Params['vnp_SecureHashType'];
+            vnp_Params = sortObject(vnp_Params);
+            var config = require('config');
+            var tmnCode = config.get('vnp_TmnCode');
+            var secretKey = config.get('vnp_HashSecret');
+            var querystring = require('qs');
+            var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+            var sha256 = require('sha256');
+            var checkSum = sha256(signData);
+            if(secureHash === checkSum){
+                //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+                res.send({code: vnp_Params['vnp_ResponseCode']});
+                //res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+            } else{
+                //res.render('success', {code: '97'})
+                res.send({code: '97'});
+            }
+        })
+        .catch(err=>{
+            res.send(err);
+        });
 }
 
 module.exports.vnpayIpn = function (req, res, next) {
 
-    console.log("1"); 
+    console.log("vnpay_ipn"); 
 
     var vnp_Params = req.query;
     var secureHash = vnp_Params['vnp_SecureHash'];
