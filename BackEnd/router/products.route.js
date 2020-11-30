@@ -14,6 +14,7 @@ route.get('/phimbo',controller.phimbo);
 route.get('/phimle',controller.phimle);
 
 route.get('/categories/:type',controller.type);
+route.get('/categories/getcategories',controller.getCategories);
 
 route.post('/rating/create',controller.addComment);
 route.post('/rating/get',controller.showComment);

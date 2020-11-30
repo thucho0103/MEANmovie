@@ -127,6 +127,25 @@ module.exports.phimle = function(req,res){
 //             })
 //         })
 // }
+module.exports.getCategories = function(req, res){  
+
+    Category.find({})
+        .then(data=>{    
+            var result =[];
+            data.forEach(element => {
+                var cate = {
+                    title:element.category,
+                    name:element.categorySlug,
+                };
+                result.push(cate);
+            });       
+            res.status(200).send(result);
+        })  
+        .catch(err=>{
+            res.status(500).send(err);   
+        });
+}
+
 module.exports.type = function(req, res){
     var perPage = 8;
     var page = req.query.page || 1;
