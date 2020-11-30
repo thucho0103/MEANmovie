@@ -17,7 +17,7 @@ module.exports.index = function(req, res){
             }
             var user = {
                 email:result.email,
-                nickName:result.nickName,
+                nickname:result.nickName,
                 plan: dd+'/'+mm+'/'+yyyy,
                 dateCreate:result.dateCreate
             }

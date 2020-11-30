@@ -188,7 +188,7 @@ module.exports.postReset = function (req, res) {
                         subject: 'Sending with Movie+',
                         html: `
                         <p> Yêu cầu lấy lại mật khẩu </p>
-                        <p> Click vào <a href="http://localhost:3000/auth/reset/${token}"> link </a> để tạo mật khẩu mới </p>                    
+                        <p> Click vào <a href="http://localhost:4200/forgotpassword/${token}"> link </a> để tạo mật khẩu mới </p>                    
                     `
                     })
                     //res.render('auth/reset',{errors:'Gửi thành công!',values:email});                   
