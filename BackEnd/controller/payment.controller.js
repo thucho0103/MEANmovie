@@ -1,14 +1,15 @@
 var express = require('express');
 const Users = require('../models/users.model');
+const Payment = require('../models/paymentDetail.model');
 var router = express.Router();
 var $ = require('jquery');
 
 module.exports.createPayment = function(req,res){
     var plan = req.query.plan;
     var amoutSelect;
-    Users.findOne({ _id: req.user.sub })
+    var month;
+    Users.findOne({ _id: req.user.sub})
         .then(user=>{
-            userPayment = user;
             console.log(user.email);
             return user.email;
         })
@@ -16,12 +17,15 @@ module.exports.createPayment = function(req,res){
             console.log(userName);
             switch (plan) {
                 case 1: 
-                    amoutSelect ='40000';   
+                    amoutSelect ='40000'; 
+                    month = 3;  
                     break;
                 case 2: 
                     amoutSelect ='60000';   
+                    month = 7; 
                     break;
                 default: amoutSelect ='20000';  
+                    month = 1; 
                     break;
             }    
             var ipAddr = req.headers['x-forwarded-for'] ||
@@ -83,10 +87,15 @@ module.exports.createPayment = function(req,res){
             vnp_Params['vnp_SecureHashType'] =  'SHA256';
             vnp_Params['vnp_SecureHash'] = secureHash;
             vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
-        
-            userPayment.plan = new Date().setDate(new Date().getDate() + 30);
-            userPayment.save();
 
+            var paymetDetail = new Payment({
+                payment_id:orderId,
+                email:userName,
+                amount:amoutSelect,
+                month:month,
+                status:"đang chờ thanh toán",
+            });
+            paymetDetail.save();
             //Neu muon dung Redirect thi dong dong ben duoi
             res.status(200).json({code: '00', data: vnpUrl});
             //Neu muon dung Redirect thi mo dong ben duoi va dong dong ben tren
@@ -98,36 +107,41 @@ module.exports.createPayment = function(req,res){
 }
 
 module.exports.vnpayReturn = function (req, res, next) {
-
-    Users.find({email:req.user})
-        .then(user=>{
-            console.log("vnpay_return");
-            var vnp_Params = req.query;
-            var secureHash = vnp_Params['vnp_SecureHash'];
-            delete vnp_Params['vnp_SecureHash'];
-            delete vnp_Params['vnp_SecureHashType'];
-            vnp_Params = sortObject(vnp_Params);
-            var config = require('config');
-            var tmnCode = config.get('vnp_TmnCode');
-            var secretKey = config.get('vnp_HashSecret');
-            var querystring = require('qs');
-            var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-            var sha256 = require('sha256');
-            var checkSum = sha256(signData);
-            if(secureHash === checkSum){
-                console.log("thanh cong");
-                //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-                res.send({code: vnp_Params['vnp_ResponseCode']});
-                //res.render('success', {code: vnp_Params['vnp_ResponseCode']})
-            } else{
-                //res.render('success', {code: '97'})
-                console.log("that bai");
-                res.send({code: '97'});
-            }
+    console.log("vnpay_return");
+    var amout = req.query.vnp_Amount;
+    var vnp_Params = req.query;
+    var secureHash = vnp_Params['vnp_SecureHash'];
+    delete vnp_Params['vnp_SecureHash'];
+    delete vnp_Params['vnp_SecureHashType'];
+    vnp_Params = sortObject(vnp_Params);
+    var config = require('config');
+    var tmnCode = config.get('vnp_TmnCode');
+    var secretKey = config.get('vnp_HashSecret');
+    var querystring = require('qs');
+    var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
+    var sha256 = require('sha256');
+    var checkSum = sha256(signData);
+    if(secureHash === checkSum){       
+        Users.findOne({_id:req.user.sub})
+        .then(user=>{   
+            console.log(user.plan);
+            // if()
+            user.plan = new Date().setMonth(user.plan.getMonth() + 1);  
+            user.save();                        
+        })
+        .then(result=>{
+            console.log("thanh cong");
+            res.send({Message:"success"});
         })
         .catch(err=>{
             res.send(err);
         });
+    } else{
+        //res.render('success', {code: '97'})
+        console.log("that bai");
+        res.send({code: '97'});
+    }
+    
 }
 
 module.exports.vnpayIpn = function (req, res, next) {
@@ -153,6 +167,28 @@ module.exports.vnpayIpn = function (req, res, next) {
     if(secureHash === checkSum){
         var orderId = vnp_Params['vnp_TxnRef'];
         var rspCode = vnp_Params['vnp_ResponseCode'];
+        Users.findOne({_id:req.user.sub})
+        .then(user=>{   
+            console.log(orderId);
+            Payment.findOne({payment_id:orderId})
+                .then(payment=>{
+                    console.log(payment);
+                    payment.status = "Giao dịch thành công";
+                    user.plan = new Date().setMonth(user.plan.getMonth() + payment.month);
+                    payment.save();
+                    user.save();
+                })
+                .catch(err=>{
+                    res.send(err);
+                });                                   
+        })
+        .then(result=>{
+            console.log("thanh cong");
+            res.send({Message:"success"});
+        })
+        .catch(err=>{
+            res.send(err);
+        });
         //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
         res.status(200).json({RspCode: '00', Message: 'success'})
     }

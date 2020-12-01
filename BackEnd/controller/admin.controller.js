@@ -5,6 +5,7 @@ var cheerio = require('cheerio');
 const bcrypt = require('bcrypt');
 const Movie = require('../models/movie.model');
 const Category = require('../models/category.model');
+const Payment = require('../models/paymentDetail.model');
 const JWT = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../middlewares/jwt.middlerware');
@@ -292,6 +293,17 @@ module.exports.deleteuser = function(req, res){
         return res.status(500).json({message : err});
     }); 
 }
+
+module.exports.listPayment = function(req, res){
+    Payment.find({})
+    .then(list=>{
+        return res.status(200).send(list);             
+    })
+    .catch(err=>{
+        return res.status(500).json({message : err});
+    }); 
+}
+
 module.exports.crawl = function(req,res){
     res.render('admin/phimmoi');
 }

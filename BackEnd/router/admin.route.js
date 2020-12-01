@@ -34,5 +34,8 @@ route.post('/createuser',passport.authenticate('jwt',{session : false}),authMidd
 route.get('/edituser/:item',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.editUser);
 route.post('/edituser',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.postEditUser);
 
-route.delete('/deleteUser',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.deleteuser);
+route.post('/deleteUser',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.deleteuser);
+
+route.get('/listpayment',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.listPayment);
+
 module.exports = route;
