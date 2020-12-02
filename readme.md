@@ -6,3 +6,12 @@ Thanh toán :
 
 Hiển thị danh sách người dùng đã thanh toán
 admin/listpayment
+
+quản lý user có trả về id
+
+create user dùng lại api của register
+edit user truyền trong body : id, email, nickname,password, dateCreate, plan
+
+
+
+

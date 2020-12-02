@@ -160,24 +160,31 @@ module.exports.createUser = function(req, res){
     res.render('admin/createuser',{errors:'0'});
 }
 module.exports.postCreateUser = function(req,res){
-    Users.find({email: req.body.email}, function(err,data) {
-        var errors = ['email đã tồn tại'];
-        if(data.length){
-            res.render('admin/createuser',{errors:errors});
-            return;
-        }
-        var user = {
-            userName:req.body.userName,
-            email:req.body.email,
-            phoneNumber:req.body.phoneNumber,
-            password:req.body.password,
-            dateCreate: new Date().toDateString(),
-        }
-        var newUser = Users(user).save(function(err,data){
-            if (err) throw err;
-            res.redirect('/admin/manageuser');
+    const password =req.body.password;
+    Users.find({email: req.body.email})
+        .then(data =>{
+            if(data.length){               
+                return res.status(400).json({errors:"email đã tồn tại"});;
+            }
+            return bcrypt.hash(password, 12)
+        .then(HashPassword=>{
+            var user = {
+                nickName:req.body.nickname,
+                email:req.body.email,
+                password : HashPassword,
+                plan: Date.parse(req.body.plan),
+                password:req.body.password,
+                dateCreate: Date.parse(req.body.dateCreate),
+            }
+            var newUser = Users(user).save(function(err,data){
+                if (err) res.status(500).send(err);   
+                res.status(200).json({message : "Thêm thành công"});           
+            });
+        })           
+        })
+        .catch(err=>{
+            res.status(500).send(err);   
         });
-    });
 }
 // managa user 
 module.exports.manageuser = function(req, res){
@@ -190,12 +197,6 @@ module.exports.manageuser = function(req, res){
         .exec(function(err,data){
             Users.countDocuments({}).exec(function(err,count){
                 if (err) return res.status(500).send(err);
-                //console.log(count);
-
-                // res.render('admin/manageUser', {
-                // users: data , 
-                // current: page,
-                // pages: Math.ceil(count/perPage)});
                 var listUser = [];               
                 data.forEach(element => {
                     if(!element.isAdmin){
@@ -212,8 +213,9 @@ module.exports.manageuser = function(req, res){
                             mm='0'+mm;
                         }
                         var user_infor ={
+                            id:element._id,
                             email:element.email,
-                            nickName:element.nickName,
+                            nickname:element.nickName,
                             dateCreate:element.dateCreate,
                             plan:dd+'/'+mm+'/'+yyyy,              
                         };
@@ -234,18 +236,28 @@ module.exports.editUser= function(req, res){
     });
 }
 module.exports.postEditUser = function(req,res){
+    var currentUser;
     Users.findOne({_id: req.body.id})
         .then(user=>{
-            user.nickName = req.body.nickName;
-            user.dateCreate = req.body.dateCreate;
-            user.plan = req.body.plan;             
-            user.save();           
-        })
-        .then(result =>{
-            return res.status(200).json({message : "Cập nhật thành công"});
-        })
+            if(!user){
+                return res.status(400).json({message : "user không tồn tại"});
+            }
+            currentUser = user;
+            return bcrypt.hash(req.body.password, 12); 
+        }) 
+        .then(HashPassword=>{
+            console.log(HashPassword);
+            currentUser.nickName = req.body.nickname;
+            currentUser.email = req.body.email;
+            currentUser.password = HashPassword;
+            currentUser.dateCreate = req.body.dateCreate;
+            currentUser.plan = new Date(Date.parse(req.body.plan));             
+            currentUser.save();      
+            res.status(200).json({message : "Cập nhật thành công"});  
+        })                          
         .catch(err=>{
-            return res.status(500).json({message : "Cập nhật thất bại"})
+            console.log(err);
+            res.status(500).json({message : "Cập nhật thất bại"});
         })        
 }
 
@@ -282,11 +294,11 @@ module.exports.deleteuser = function(req, res){
     .then(user=>{
         console.log(user);
         if(!user){
-            return res.status(200).json({message : "Phim không tồn tại"});
+            return res.status(200).json({message : "Người dùng không tồn tại"});
         }
         else{
             user.remove();
-            return res.status(200).json({message : "Xoá thành công"});
+            return res.status(200).json({message : "Người dùng thành công"});
         }       
     })
     .catch(err=>{
