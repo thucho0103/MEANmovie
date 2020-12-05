@@ -13,5 +13,9 @@ create user dùng lại api của register
 edit user truyền trong body : id, email, nickname,password, dateCreate, plan
 
 
+edit category truyền lên id,category
+delelte category truyền lên id
+
+
 
 

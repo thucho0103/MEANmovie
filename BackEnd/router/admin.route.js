@@ -23,6 +23,8 @@ route.post('/editMovie',authMiddleware.requireAuth,controller.postEditproduct);
 
 route.get('/categories/getcategories',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.getCategories);
 route.post('/categories/add',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.addCategories);
+route.post('/categories/edit',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.editCategories);
+route.post('/categories/delete',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.deleteCategories);
 
 route.post('/deleteMovie',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.deleteProduct);
 

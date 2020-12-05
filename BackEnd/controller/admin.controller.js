@@ -270,6 +270,34 @@ module.exports.addCategories = function(req, res){
     res.send("success");
 }
 
+module.exports.editCategories = function(req, res){  
+    Category.find({_id:req.body.id})
+        .then(result=>{
+            if(!result){
+                return res.status(400).json({message : "category không tồn tại"});
+            }
+            result.category = req.body.category;                       
+            result.save();      
+            res.status(200).json({message : "Cập nhật thành công"}); 
+        })
+        .catch(err=>{
+            res.status(500).send(err);   
+        })
+}
+
+module.exports.deleteCategories = function(req, res){  
+    Category.find({_id:req.body.id})
+        .then(result=>{
+            if(!result){
+                return res.status(400).json({message : "category không tồn tại"});
+            }
+            result.remove();      
+            res.status(200).json({message : "Xoá thành công"}); 
+        })
+        .catch(err=>{
+            res.status(500).send(err);   
+        })
+}
 module.exports.getCategories = function(req, res){  
     Category.find({})
         .then(data=>{    
