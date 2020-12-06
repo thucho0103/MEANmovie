@@ -304,6 +304,7 @@ module.exports.getCategories = function(req, res){
             var result =[];
             data.forEach(element => {
                 var cate = {
+                    id:element._id,
                     title:element.category,
                     name:element.categorySlug,
                 };
