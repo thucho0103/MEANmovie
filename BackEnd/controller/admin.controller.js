@@ -271,7 +271,7 @@ module.exports.addCategories = function(req, res){
 }
 
 module.exports.editCategories = function(req, res){  
-    Category.find({_id:req.body.id})
+    Category.findOne({_id:req.body.id})
         .then(result=>{
             if(!result){
                 return res.status(400).json({message : "category không tồn tại"});
@@ -286,11 +286,12 @@ module.exports.editCategories = function(req, res){
 }
 
 module.exports.deleteCategories = function(req, res){  
-    Category.find({_id:req.body.id})
+    Category.findOne({_id:req.body.id})
         .then(result=>{
             if(!result){
                 return res.status(400).json({message : "category không tồn tại"});
             }
+            console.log(result);
             result.remove();      
             res.status(200).json({message : "Xoá thành công"}); 
         })
