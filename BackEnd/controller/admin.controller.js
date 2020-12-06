@@ -263,11 +263,20 @@ module.exports.postEditUser = function(req,res){
 
 module.exports.addCategories = function(req, res){  
     const newCategory = req.body.Category;
-    const cate = new Category({
-        category:newCategory
-    });
-    cate.save();    
-    res.send("success");
+    Category.findOne({category:newCategory})
+        .then(result=>{
+            if(!result){
+                return res.status(400).json({message : "Category đã tồn tại"});
+            }
+            const cate = new Category({
+                category:newCategory
+            });
+            cate.save(); 
+            res.status(200).json({message : "Thêm mới thành công"}); 
+        })
+        .catch(err=>{
+            res.status(500).send(err);   
+        })        
 }
 
 module.exports.editCategories = function(req, res){  
