@@ -21,6 +21,7 @@ route.post('/rating/get',controller.showComment);
 
 route.post('/comment/create',controller.addComment);
 route.post('/comment/get',controller.showComment);
+route.post('/comment/delete',controller.deleteComment);
 
 route.get('/search',controller.search);
 //route.get('/changemovie',controller.ChangeData);

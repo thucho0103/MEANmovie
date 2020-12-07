@@ -33,10 +33,10 @@ module.exports.addComment = function(req, res){
                 idMovie: movieId,
                 comment : comment,
                 userId :userId,
-                user:data.userName,
+                user:data.nickName,
             });
             cmt.save();              
-            return res.send("success");
+            return res.status(200).json({message:"success"});
         })
         .catch(err =>{            
             return res.status(500).send(err);
@@ -53,6 +53,19 @@ module.exports.showComment = function(req, res){
         }); 
 }
 
+module.exports.deleteComment = function(req, res){ 
+    Comment.find({idMovie:req.body.movie_id})
+        .then(data =>{
+            if(data.userId != req.user.sub){
+                return res.status(400).json({message:"không thể xoá comment của người khác"});
+            }   
+            data.remove();
+            return res.status(200).json({message:"success"});
+        })
+        .catch(err =>{            
+            return res.status(500).send(err);
+        }); 
+}
 
 module.exports.phimbo = function(req, res){
     var perPage = 8;
@@ -73,11 +86,11 @@ module.exports.phimle = function(req,res){
     var perPage = 8;
     var page = req.query.page || 1;
     Movies
-        .find({"category":"phimle"})
+        .find({})
         .skip((perPage * page) - perPage)
         .limit(perPage)
         .exec(function(err,data){
-            Movies.countDocuments({"category":"phimle"}).exec(function(err,count){
+            Movies.countDocuments({}).exec(function(err,count){
                 if (err) return next (err)
                 res.status(200).send(data);                
             })
@@ -160,12 +173,6 @@ module.exports.type = function(req, res){
             if (err) {
                 return res.status(500).json({message: "Error"});
             }           
-            //console.log(count);s
-            // res.render('products/phim', {
-            // title:title, 
-            // dsphim: data , 
-            // current: page,
-            // pages: Math.ceil(count/perPage)});
             console.log(req.user.sub);
             res.status(200).send(data);
         })
