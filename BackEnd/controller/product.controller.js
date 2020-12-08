@@ -27,7 +27,7 @@ module.exports.addComment = function(req, res){
     var comment = req.body.comment;
     var userId = req.user.sub;
      
-    Users.findOne({_id:req.user.sub})
+    Users.findOne({userId:req.user.sub})
         .then(data=>{
             const cmt = new Comment({
                 idMovie: movieId,
@@ -54,7 +54,7 @@ module.exports.showComment = function(req, res){
 }
 
 module.exports.deleteComment = function(req, res){ 
-    Comment.find({_id:req.body.id})
+    Comment.findOne({_id:req.body.id})
         .then(data =>{
             if(data.userId != req.user.sub){
                 return res.status(400).json({message:"không thể xoá comment của người khác"});
