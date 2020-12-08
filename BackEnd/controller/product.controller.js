@@ -27,7 +27,7 @@ module.exports.addComment = function(req, res){
     var comment = req.body.comment;
     var userId = req.user.sub;
      
-    Users.findOne({userId:req.user.sub})
+    Users.findOne({_id:req.user.sub})
         .then(data=>{
             const cmt = new Comment({
                 idMovie: movieId,
