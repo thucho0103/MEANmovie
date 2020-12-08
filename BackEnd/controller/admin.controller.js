@@ -116,8 +116,10 @@ module.exports.editProduct = function(req, res){
             })
 }
 module.exports. postEditproduct = function(req,res){
+    console.log(req.body);
     Movie.findOne({_id: req.body.id})
         .then(movie=>{
+            console.log(movie);
             movie.title = req.body.title;
             movie.year = req.body.year;
             movie.kind = req.body.kind;
@@ -126,8 +128,7 @@ module.exports. postEditproduct = function(req,res){
             movie.source = req.body.source.split(",");
             movie.poster = req.body.poster;
             movie.imageSource = req.body.imageSource;
-            movie.dateUpload = req.body.dateUpload;
-            
+            movie.dateUpload = req.body.dateUpload;           
             movie.save();           
         })
         .then(result =>{

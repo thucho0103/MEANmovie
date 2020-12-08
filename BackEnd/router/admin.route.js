@@ -19,7 +19,7 @@ route.get('/createMovie',passport.authenticate('jwt',{session : false}),authMidd
 route.post('/createMovie',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.postCreateproduct);
 
 route.get('/editMovie/:item',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.editProduct);
-route.post('/editMovie',authMiddleware.requireAuth,controller.postEditproduct);
+route.post('/editMovie',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.postEditproduct);
 
 route.get('/categories/getcategories',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.getCategories);
 route.post('/categories/add',passport.authenticate('jwt',{session : false}),authMiddleware.requireAuth,controller.addCategories);

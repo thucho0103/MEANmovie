@@ -1,8 +1,7 @@
 var User = require('../models/users.model'); 
 
 module.exports.requireAuth = function(req, res, next){
-    console.log(req.user);
-    
+    console.log(req.user);    
     User.findOne({_id : req.user.sub})
         .then(result =>{
             console.log(result);
