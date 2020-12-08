@@ -266,7 +266,8 @@ module.exports.addCategories = function(req, res){
     const newCategory = req.body.Category;
     Category.findOne({category:newCategory})
         .then(result=>{
-            if(!result){
+            console.log(result);
+            if(result){
                 return res.status(400).json({message : "Category đã tồn tại"});
             }
             const cate = new Category({
