@@ -29,13 +29,9 @@ module.exports.index = function(req, res){
 }
 module.exports.postUpdateInfo = function(req,res){
     const nickName = req.body.nickName;
-    const phoneNumber = req.body.phoneNumber;
-    const address = req.body.address;
-    Users.findOne({_id:req.cookies.userId})
+    Users.findOne({_id:req.user.sub})
         .then(user =>{
             user.nickName = nickName;
-            user.phoneNumber = phoneNumber;
-            user.address = address;
             return user.save();
         })
         .then(result =>{
